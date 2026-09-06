@@ -103,9 +103,8 @@ export const BackgroundVideo: React.FC = () => {
 
   return (
     <>
-      {/* Instant lightweight poster — paints in ~2KB while video defers.
-          .hero-media centers the avatar on phones (50% 28%) and keeps the
-          desktop 70% framing — see index.css. */}
+      {/* Centered character poster — paints instantly while video defers.
+          .hero-media keeps it centered on phone, tablet and desktop. */}
       <img
         src={POSTER_URL}
         alt=""

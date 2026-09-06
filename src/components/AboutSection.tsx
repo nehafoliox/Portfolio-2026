@@ -34,7 +34,7 @@ export const AboutSection: React.FC = () => {
           alt=""
           aria-hidden="true"
           loading="lazy"
-          className="w-[72px] sm:w-[160px] md:w-[210px] h-auto object-contain select-none"
+          className="w-[72px] sm:w-[120px] lg:w-[210px] h-auto object-contain select-none"
           draggable={false}
         />
       </FadeIn>
@@ -52,7 +52,7 @@ export const AboutSection: React.FC = () => {
           alt=""
           aria-hidden="true"
           loading="lazy"
-          className="w-[64px] sm:w-[140px] md:w-[180px] h-auto object-contain select-none"
+          className="w-[64px] sm:w-[110px] lg:w-[180px] h-auto object-contain select-none"
           draggable={false}
         />
       </FadeIn>
@@ -70,7 +70,7 @@ export const AboutSection: React.FC = () => {
           alt=""
           aria-hidden="true"
           loading="lazy"
-          className="w-[72px] sm:w-[160px] md:w-[210px] h-auto object-contain select-none"
+          className="w-[72px] sm:w-[120px] lg:w-[210px] h-auto object-contain select-none"
           draggable={false}
         />
       </FadeIn>
@@ -88,7 +88,7 @@ export const AboutSection: React.FC = () => {
           alt=""
           aria-hidden="true"
           loading="lazy"
-          className="w-[80px] sm:w-[170px] md:w-[220px] h-auto object-contain select-none"
+          className="w-[80px] sm:w-[130px] lg:w-[220px] h-auto object-contain select-none"
           draggable={false}
         />
       </FadeIn>

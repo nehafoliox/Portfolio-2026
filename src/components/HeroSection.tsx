@@ -45,6 +45,16 @@ export const HeroSection: React.FC = () => {
             'linear-gradient(to top, rgba(12,12,12,0.75) 0%, rgba(12,12,12,0.25) 55%, transparent 100%)',
         }}
       />
+      {/* Desktop: character is centered behind the copy, so wash the left
+          edge for legibility without dimming the face. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-[42%] pointer-events-none hidden md:block"
+        style={{
+          background:
+            'linear-gradient(to right, rgba(12,12,12,0.55) 0%, rgba(12,12,12,0.2) 60%, transparent 100%)',
+        }}
+      />
       <div className="max-w-xl relative z-10 w-full">
         {/* 1. Typewriter text */}
         <p

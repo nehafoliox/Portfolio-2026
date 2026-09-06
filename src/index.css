@@ -60,17 +60,23 @@ body {
   color: transparent;
 }
 
-/* Hero avatar framing: phones are narrow, so `cover` crops the sides hard.
-   Center the subject horizontally and lift it above the bottom text;
-   desktop keeps the original right-of-center framing. */
+/* Hero character framing: the video frame is pre-cropped around the
+   character (see public/final.mp4), so true center works on every screen —
+   phone, tablet and desktop. Vertical 32% keeps the face clear of the
+   bottom text on tall phones without clipping the ears on wide screens. */
 .hero-media {
   object-fit: cover;
-  object-position: 50% 28%;
+  object-position: 50% 32%;
 }
 
-@media (min-width: 768px) {
-  .hero-media {
-    object-position: 70% center;
+/* Project stacking deck: pinned 85vh cards only where the viewport is
+   both wide enough (sm+) and tall enough (600px+). Short landscape phones
+   fall back to a plain static stack so card content never clips. */
+@media (min-width: 640px) and (min-height: 600px) {
+  .stack-card {
+    position: sticky;
+    height: 85vh;
+    top: calc(8rem + var(--stack-off, 0px));
   }
 }
 

@@ -106,16 +106,16 @@ function ProjectCard({
     offset: ['start end', 'start start'],
   });
 
-  // Pinned stacking only exists on sm+ — on phones the shrink would look
-  // like a bug, so keep scale at 1 there.
+  // Pinned stacking only exists on sm+ TALL viewports (see .stack-card in
+  // index.css) — elsewhere the shrink would look like a bug, so keep scale
+  // at 1 there.
+  const STACK_MQ = '(min-width: 640px) and (min-height: 600px)';
   const [isDesktop, setIsDesktop] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      window.matchMedia('(min-width: 640px)').matches
+    () => typeof window !== 'undefined' && window.matchMedia(STACK_MQ).matches
   );
 
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 640px)');
+    const mq = window.matchMedia(STACK_MQ);
     const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
@@ -135,9 +135,9 @@ function ProjectCard({
           '--stack-off': `${index * 28}px`,
         } as unknown as React.CSSProperties
       }
-      // Stacking pinned cards need 85vh viewports — on phones that clips
-      // content under the browser chrome, so stack statically instead.
-      className="w-full sm:sticky sm:h-[85vh] sm:top-[calc(8rem_+_var(--stack-off))] origin-top mb-6 sm:mb-0"
+      // Stacking pinned cards need tall viewports — on short screens the
+      // .stack-card CSS keeps them static so content never clips.
+      className="stack-card w-full origin-top mb-6 sm:mb-0"
     >
       <div
         style={{ fontFamily: "'Kanit', sans-serif" }}
