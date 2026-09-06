@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,10 +16,54 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Scroll-spy: highlight the link for the section currently in view.
+  // Sections are lazy-loaded, so re-query until all three exist.
+  useEffect(() => {
+    const ids = ['about', 'project', 'contact'];
+    let observer: IntersectionObserver | null = null;
+    let tries = 0;
+
+    const observe = () => {
+      const sections = ids
+        .map((id) => document.getElementById(id))
+        .filter((el): el is HTMLElement => el !== null);
+
+      if (sections.length === ids.length || tries >= 20) {
+        if (sections.length === 0) return;
+        const visible = new Map<string, number>();
+        observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                visible.set(entry.target.id, entry.intersectionRatio);
+              } else {
+                visible.delete(entry.target.id);
+              }
+            });
+            if (visible.size > 0) {
+              const top = [...visible.entries()].sort((a, b) => b[1] - a[1])[0][0];
+              setActive(top);
+            } else if (window.scrollY < 200) {
+              setActive(null);
+            }
+          },
+          { rootMargin: '-40% 0px -55% 0px', threshold: [0, 0.1, 0.25, 0.5] }
+        );
+        sections.forEach((s) => observer!.observe(s));
+        return;
+      }
+      tries += 1;
+      window.setTimeout(observe, 500);
+    };
+
+    observe();
+    return () => observer?.disconnect();
+  }, []);
+
   const navLinks = [
-    { label: 'About', href: '#about' },
-    { label: 'Project', href: '#project' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'About', href: '#about', id: 'about' },
+    { label: 'Project', href: '#project', id: 'project' },
+    { label: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   return (
@@ -46,22 +91,30 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Links */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-[13px] sm:text-[14px] text-[#e0e0e0] hover:text-white font-medium transition-colors cursor-pointer"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {navLinks.map((link) => {
+            const isActive = active === link.id;
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                aria-current={isActive ? 'location' : undefined}
+                className={`text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer rounded-full px-3 py-1.5 ${
+                  isActive
+                    ? 'bg-white text-black'
+                    : 'text-[#e0e0e0] hover:text-white hover:bg-white/10'
+                }`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
 
           {/* Resume download button */}
           <a
             href="/Neha_Patel_Resume.pdf"
             download="Neha_Patel_Resume.pdf"
-            className="text-[13px] sm:text-[14px] text-[#e0e0e0] hover:text-white font-medium transition-colors cursor-pointer"
+            className="text-[13px] sm:text-[14px] text-[#e0e0e0] hover:text-white font-medium transition-colors cursor-pointer rounded-full px-3 py-1.5 hover:bg-white/10"
           >
             Resume
           </a>
