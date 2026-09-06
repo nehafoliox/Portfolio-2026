@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import FadeIn from './FadeIn';
 import LiveProjectButton from './LiveProjectButton';
@@ -106,22 +106,10 @@ function ProjectCard({
     offset: ['start end', 'start start'],
   });
 
-  // Pinned stacking only exists on sm+ TALL viewports (see .stack-card in
-  // index.css) — elsewhere the shrink would look like a bug, so keep scale
-  // at 1 there.
-  const STACK_MQ = '(min-width: 640px) and (min-height: 600px)';
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia(STACK_MQ).matches
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(STACK_MQ);
-    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
-
-  const targetScale = isDesktop ? 1 - (total - 1 - index) * 0.03 : 1;
+  // Stacking deck: each card pins and scales down as the next slides over
+  // (same animation on all screens — svh keeps it framed under mobile
+  // browser chrome).
+  const targetScale = 1 - (total - 1 - index) * 0.03;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
   return (
@@ -135,9 +123,10 @@ function ProjectCard({
           '--stack-off': `${index * 28}px`,
         } as unknown as React.CSSProperties
       }
-      // Stacking pinned cards need tall viewports — on short screens the
-      // .stack-card CSS keeps them static so content never clips.
-      className="stack-card w-full origin-top mb-6 sm:mb-0"
+      // Pinned stacking card — slides under the next card while scaling
+      // down slightly. svh (with vh fallback) keeps 85% sizing correct
+      // under mobile browser chrome.
+      className="stack-card sticky h-[85vh] supports-[height:100svh]:h-[85svh] w-full top-[calc(6rem_+_var(--stack-off))] md:top-[calc(8rem_+_var(--stack-off))] origin-top mb-2 sm:mb-0"
     >
       <div
         style={{ fontFamily: "'Kanit', sans-serif" }}

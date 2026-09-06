@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const VIDEO_URL = '/final.mp4';
-const POSTER_URL = '/video-poster.webp';
+const VIDEO_URL = '/hero.mp4';
+const POSTER_URL = '/hero-poster.webp';
 const SENSITIVITY = 0.8;
 
 export const BackgroundVideo: React.FC = () => {

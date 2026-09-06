@@ -61,22 +61,24 @@ body {
 }
 
 /* Hero character framing: the video frame is pre-cropped around the
-   character (see public/final.mp4), so true center works on every screen —
-   phone, tablet and desktop. Vertical 32% keeps the face clear of the
-   bottom text on tall phones without clipping the ears on wide screens. */
+   character (see public/hero.mp4), so horizontal center holds on every
+   screen — phone, tablet and desktop. Vertical focus drifts toward the
+   middle as screens get larger (phones keep the face clear of the bottom
+   text; desktop centers the figure). */
 .hero-media {
   object-fit: cover;
-  object-position: 50% 32%;
+  object-position: 50% 30%;
 }
 
-/* Project stacking deck: pinned 85vh cards only where the viewport is
-   both wide enough (sm+) and tall enough (600px+). Short landscape phones
-   fall back to a plain static stack so card content never clips. */
-@media (min-width: 640px) and (min-height: 600px) {
-  .stack-card {
-    position: sticky;
-    height: 85vh;
-    top: calc(8rem + var(--stack-off, 0px));
+@media (min-width: 768px) {
+  .hero-media {
+    object-position: 50% 38%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-media {
+    object-position: 50% 42%;
   }
 }
 

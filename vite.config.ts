@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     watch: {
       // Ignore large media files and the nested Next.js project to prevent EBUSY errors
-      ignored: ['**/final.mp4', '**/neha-portfolio/**'],
+      ignored: ['**/hero.mp4', '**/neha-portfolio/**'],
     },
   },
   build: {
