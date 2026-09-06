@@ -1,0 +1,452 @@
+@import "tailwindcss";
+
+/* ─── Design Tokens ─── */
+:root {
+  --color-bg: #F5F3EF;
+  --color-bg-alt: #EDEBE6;
+  --color-fg: #111111;
+  --color-fg-muted: #666666;
+  --color-accent: #CDFF50;
+  --color-accent-light: #E2FF8A;
+  --color-accent-dark: #A8D636;
+  --color-surface-dark: #0A0A0A;
+  --color-surface-dark-alt: #141414;
+  --color-white: #FAFAFA;
+  --color-divider: rgba(17, 17, 17, 0.08);
+  --color-divider-light: rgba(255, 255, 255, 0.08);
+
+  --font-display: "Host Grotesk", sans-serif;
+
+  --text-hero: clamp(5rem, 14vw, 12rem);
+  --text-display: clamp(4rem, 10vw, 8rem);
+  --text-display-sm: clamp(2.5rem, 6vw, 5rem);
+  --text-heading: clamp(2rem, 4vw, 3.5rem);
+  --text-subheading: clamp(1.25rem, 2vw, 1.75rem);
+  --text-body: clamp(0.95rem, 1.2vw, 1.125rem);
+  --text-caption: clamp(0.8rem, 0.95vw, 0.9375rem);
+  --text-meta: clamp(0.65rem, 0.75vw, 0.75rem);
+
+  --tracking-tight: -0.04em;
+  --tracking-normal: -0.01em;
+  --tracking-wide: 0.12em;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  cursor: none;
+}
+
+/* ─── Tailwind v4 Theme ─── */
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-foreground-muted: var(--color-fg-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-surface-dark: var(--color-surface-dark);
+  --color-surface-dark-alt: var(--color-surface-dark-alt);
+  --color-bg-alt: var(--color-bg-alt);
+  --color-divider: var(--color-divider);
+  --color-divider-light: var(--color-divider-light);
+  --font-sans: var(--font-display);
+}
+
+/* ─── Smooth Scroll (Lenis) ─── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ─── Base ─── */
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-display);
+  letter-spacing: var(--tracking-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── Custom Cursor ─── */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--color-fg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s var(--ease-out-expo),
+              height 0.3s var(--ease-out-expo),
+              background 0.3s var(--ease-out-expo);
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--color-fg);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s var(--ease-out-expo),
+              height 0.4s var(--ease-out-expo),
+              border-color 0.3s var(--ease-out-expo),
+              background 0.3s var(--ease-out-expo),
+              opacity 0.3s var(--ease-out-expo);
+  opacity: 0.5;
+}
+
+/* Cursor — inverted on dark backgrounds */
+.cursor-dot.cursor-inverted {
+  background: var(--color-white);
+}
+
+.cursor-ring.cursor-inverted {
+  border-color: var(--color-white);
+}
+
+/* Cursor hover state */
+.cursor-hover .cursor-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--color-accent);
+}
+
+.cursor-hover .cursor-ring {
+  width: 60px;
+  height: 60px;
+  border-color: var(--color-accent);
+  opacity: 0.3;
+}
+
+.cursor-hover .cursor-dot.cursor-inverted {
+  background: var(--color-accent);
+}
+
+.cursor-hover .cursor-ring.cursor-inverted {
+  border-color: var(--color-accent);
+}
+
+/* Cursor project row state */
+.cursor-project .cursor-dot {
+  width: 80px;
+  height: 80px;
+  background: var(--color-accent);
+}
+
+.cursor-project .cursor-ring {
+  width: 80px;
+  height: 80px;
+  opacity: 0;
+}
+
+.cursor-project .cursor-label {
+  opacity: 1;
+}
+
+.cursor-label {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-fg);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+/* Hide cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  :root,
+  body {
+    cursor: auto !important;
+  }
+  .cursor-dot,
+  .cursor-ring,
+  .cursor-label {
+    display: none !important;
+  }
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-fg);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-fg);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* ─── Typography Utilities ─── */
+.text-hero {
+  font-size: var(--text-hero);
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+}
+
+.text-display {
+  font-size: var(--text-display);
+  line-height: 0.9;
+  letter-spacing: var(--tracking-tight);
+  font-weight: 800;
+}
+
+.text-display-sm {
+  font-size: var(--text-display-sm);
+  line-height: 0.95;
+  letter-spacing: var(--tracking-tight);
+  font-weight: 800;
+}
+
+.text-heading {
+  font-size: var(--text-heading);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  font-weight: 700;
+}
+
+.text-subheading {
+  font-size: var(--text-subheading);
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-size: var(--text-body);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.text-caption {
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.text-meta {
+  font-size: var(--text-meta);
+  line-height: 1.4;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ─── Marquee Animation ─── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
+}
+
+/* ─── Toast Animation ─── */
+@keyframes toast-in {
+  0% { transform: translateY(100%) translateX(-50%); opacity: 0; }
+  100% { transform: translateY(0) translateX(-50%); opacity: 1; }
+}
+
+@keyframes toast-out {
+  0% { transform: translateY(0) translateX(-50%); opacity: 1; }
+  100% { transform: translateY(100%) translateX(-50%); opacity: 0; }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.4s var(--ease-out-expo) forwards;
+}
+
+.animate-toast-out {
+  animation: toast-out 0.3s var(--ease-in-out-smooth) forwards;
+}
+
+/* ─── Scroll Indicator ─── */
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.animate-bounce-down {
+  animation: bounce-down 2s ease-in-out infinite;
+}
+
+/* ─── Nav Transition ─── */
+.nav-fixed {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(245, 243, 239, 0.9);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+/* ─── Nav Link Hover (visible dark underline, not neon text) ─── */
+.nav-link {
+  position: relative;
+  transition: opacity 0.3s var(--ease-in-out-smooth);
+}
+
+.nav-link:hover {
+  opacity: 0.6;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--color-fg);
+  transition: width 0.5s var(--ease-out-expo);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ─── Hero Sticky (for About overlap effect) ─── */
+.hero-sticky-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.content-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+/* ─── Project Row ─── */
+.project-row {
+  transition: background-color 0.4s var(--ease-out-expo),
+              color 0.4s var(--ease-out-expo);
+  cursor: none;
+}
+
+.project-row:hover {
+  background-color: var(--color-surface-dark);
+  color: var(--color-white);
+}
+
+.project-row .row-cta {
+  transition: background-color 0.4s var(--ease-out-expo),
+              color 0.4s var(--ease-out-expo),
+              border-color 0.4s var(--ease-out-expo);
+}
+
+.project-row:hover .row-cta {
+  background-color: var(--color-accent);
+  color: var(--color-fg);
+  border-color: var(--color-accent);
+}
+
+.project-row.featured {
+  background-color: var(--color-surface-dark);
+  color: var(--color-white);
+}
+
+.project-row.featured .row-cta {
+  background-color: var(--color-accent);
+  color: var(--color-fg);
+  border-color: var(--color-accent);
+}
+
+/* ─── Social Icon Hover ─── */
+.social-icon {
+  transition: transform 0.3s var(--ease-out-expo),
+              color 0.3s var(--ease-in-out-smooth),
+              border-color 0.3s var(--ease-in-out-smooth),
+              background-color 0.3s var(--ease-in-out-smooth);
+  cursor: none;
+}
+
+.social-icon:hover {
+  transform: scale(1.15) rotate(-5deg);
+  color: var(--color-fg);
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* ─── Monogram Tab ─── */
+.monogram-tab {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* ─── Interactive Elements ─── */
+a, button, [role="button"] {
+  cursor: none;
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-marquee {
+    animation: none;
+  }
+
+  .animate-bounce-down {
+    animation: none;
+  }
+
+  .project-row,
+  .project-row .row-cta,
+  .social-icon {
+    transition: none;
+  }
+
+  .cursor-dot,
+  .cursor-ring,
+  .cursor-label {
+    display: none;
+  }
+
+  :root,
+  body {
+    cursor: auto;
+  }
+}
