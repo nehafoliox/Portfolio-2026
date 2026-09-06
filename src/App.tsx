@@ -99,13 +99,14 @@ export const App: React.FC = () => {
 
       {/* Pinned Hero — header details stay fixed in place while scrolling.
           HeroSection itself is untouched; this sticky wrapper pins it so the
-          black card below slides OVER it instead of pushing it away. */}
+          black card below slides OVER it instead of pushing it away.
+          100svh keeps the avatar framed under mobile browser chrome. */}
       <div
-        aria-hidden={heroCovered}
+        aria-hidden={heroCovered || undefined}
+        className="h-screen supports-[height:100svh]:h-[100svh]"
         style={{
           position: 'sticky',
           top: 0,
-          height: '100vh',
           zIndex: 1,
           overflow: 'hidden',
           visibility: heroCovered ? 'hidden' : 'visible',
@@ -120,7 +121,7 @@ export const App: React.FC = () => {
           deck) keeps sticking to the viewport. overflow:hidden would break it. */}
       <div
         ref={overlayRef}
-        className="relative rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] overflow-clip"
+        className="relative rounded-t-[28px] sm:rounded-t-[50px] md:rounded-t-[60px] overflow-clip"
         style={{ zIndex: 10, background: '#0C0C0C' }}
       >
         <Suspense fallback={null}>

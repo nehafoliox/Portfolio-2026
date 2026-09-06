@@ -34,11 +34,21 @@ export const HeroSection: React.FC = () => {
   ];
 
   return (
-    <section className="relative z-[1] w-full h-screen min-h-screen flex flex-col justify-end pb-12 md:justify-center md:pb-0 px-5 sm:px-8 md:px-10 overflow-hidden">
-      <div className="max-w-xl relative z-10">
+    <section className="relative z-[1] w-full h-full min-h-[100svh] flex flex-col justify-end pb-[max(3rem,env(safe-area-inset-bottom))] md:justify-center md:pb-0 px-5 sm:px-8 md:px-10 overflow-hidden">
+      {/* Bottom readability gradient — text stays legible without hiding
+          the centered avatar above it on phones. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-[45%] pointer-events-none md:hidden"
+        style={{
+          background:
+            'linear-gradient(to top, rgba(12,12,12,0.75) 0%, rgba(12,12,12,0.25) 55%, transparent 100%)',
+        }}
+      />
+      <div className="max-w-xl relative z-10 w-full">
         {/* 1. Typewriter text */}
         <p
-          className="text-white mb-5 sm:mb-6 min-h-[54px] whitespace-pre-line"
+          className="text-white mb-5 sm:mb-6 min-h-[76px] sm:min-h-[84px] whitespace-pre-line text-balance"
           style={{
             fontSize: 'clamp(18px, 4vw, 26px)',
             lineHeight: 1.35,
@@ -79,13 +89,21 @@ export const HeroSection: React.FC = () => {
             type="button"
             onClick={handleCopyEmail}
             title={copied ? 'Copied to clipboard!' : 'Click to copy email'}
-            className="inline-flex items-center justify-center text-white bg-transparent border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer group"
+            className="inline-flex items-center justify-center text-white bg-transparent border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] max-w-full whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer group"
           >
-            <span>
-              Reach us:{' '}
-              <span className="underline underline-offset-1">
-                nehapatel00471@gmail.com
-              </span>
+            {/* Full email overflows 360px screens — short label on phones. */}
+            <span className="sm:hidden">{copied ? 'Copied!' : 'Copy Email'}</span>
+            <span className="hidden sm:inline">
+              {copied ? (
+                'Copied to clipboard!'
+              ) : (
+                <>
+                  Reach us:{' '}
+                  <span className="underline underline-offset-1">
+                    nehapatel00471@gmail.com
+                  </span>
+                </>
+              )}
             </span>
             {/* 12x12 copy icon (two overlapping rectangles) */}
             <svg

@@ -38,12 +38,12 @@ export const ServicesSection: React.FC = () => {
   return (
     <section
       id="services"
-      className="relative w-full bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
+      className="relative w-full bg-[#FFFFFF] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 scroll-mt-10"
     >
       <FadeIn>
         <h2
-          className="text-[#0C0C0C] font-black uppercase text-center mb-16 sm:mb-20 md:mb-28 leading-none tracking-tight"
-          style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+          className="text-[#0C0C0C] font-black uppercase text-center mb-12 sm:mb-20 md:mb-28 leading-[0.95] tracking-tight text-balance break-words"
+          style={{ fontSize: 'clamp(2.75rem, 14vw, 160px)' }}
         >
           Services
         </h2>
@@ -54,12 +54,12 @@ export const ServicesSection: React.FC = () => {
           <FadeIn
             key={service.id}
             delay={i * 0.1}
-            className="flex items-center gap-6 sm:gap-10 py-8 sm:py-10 md:py-12 border-t last:border-b"
+            className="flex items-start sm:items-center gap-4 sm:gap-10 py-7 sm:py-10 md:py-12 border-t last:border-b"
             style={{ borderColor: 'rgba(12, 12, 12, 0.15)' }}
           >
             <span
               className="font-black text-[#0C0C0C] leading-none shrink-0"
-              style={{ fontSize: 'clamp(3rem, 10vw, 140px)' }}
+              style={{ fontSize: 'clamp(2.5rem, 12vw, 140px)' }}
             >
               {service.id}
             </span>

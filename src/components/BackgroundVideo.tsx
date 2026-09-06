@@ -12,8 +12,11 @@ export const BackgroundVideo: React.FC = () => {
   const [shouldLoad, setShouldLoad] = useState(false);
   const [ready, setReady] = useState(false);
 
-  // Defer video load until browser is idle + skip on data-saver / mobile /
-  // reduced-motion — the poster alone is enough there.
+  // Defer video load until browser is idle + skip on data-saver /
+  // reduced-motion. NOTE: mobile is NOT skipped anymore — the video's first
+  // frame IS the hero avatar, and the old black 2KB poster left phones with
+  // a blank hero. Metadata + first frame is cheap; mouse-scrub stays
+  // desktop-only (pointer:fine) below.
   useEffect(() => {
     const saveData =
       (navigator as unknown as { connection?: { saveData?: boolean } })
@@ -21,8 +24,7 @@ export const BackgroundVideo: React.FC = () => {
     const reduced = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches;
-    const smallScreen = window.matchMedia('(max-width: 768px)').matches;
-    if (saveData || reduced || smallScreen) return;
+    if (saveData || reduced) return;
 
     const start = () => setShouldLoad(true);
     const w = window as unknown as {
@@ -39,6 +41,9 @@ export const BackgroundVideo: React.FC = () => {
 
   useEffect(() => {
     if (!shouldLoad) return;
+    // Touch devices have no hover — scrubbing would fight native scroll,
+    // so only enable mouse-scrub where a fine pointer exists.
+    if (!window.matchMedia('(pointer: fine)').matches) return;
     const handleMouseMove = (e: MouseEvent) => {
       const video = videoRef.current;
       if (!video || isNaN(video.duration) || video.duration === 0) return;
@@ -98,20 +103,20 @@ export const BackgroundVideo: React.FC = () => {
 
   return (
     <>
-      {/* Instant lightweight poster — paints in ~2KB while video defers */}
+      {/* Instant lightweight poster — paints in ~2KB while video defers.
+          .hero-media centers the avatar on phones (50% 28%) and keeps the
+          desktop 70% framing — see index.css. */}
       <img
         src={POSTER_URL}
         alt=""
         aria-hidden="true"
         fetchPriority="high"
         decoding="async"
-        className="fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
+        className="hero-media fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
         style={{
           position: 'fixed',
           inset: 0,
           zIndex: 0,
-          objectFit: 'cover',
-          objectPosition: '70% center',
           opacity: ready ? 0 : 1,
           transition: 'opacity 0.6s ease',
         }}
@@ -127,13 +132,11 @@ export const BackgroundVideo: React.FC = () => {
           onSeeked={handleSeeked}
           onLoadedMetadata={handleLoadedMetadata}
           onCanPlay={() => setReady(true)}
-          className="fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
+          className="hero-media fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 0,
-            objectFit: 'cover',
-            objectPosition: '70% center',
             opacity: ready ? 1 : 0,
             transition: 'opacity 0.6s ease',
           }}

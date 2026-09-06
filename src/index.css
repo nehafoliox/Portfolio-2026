@@ -18,6 +18,8 @@ body,
 
 html {
   scroll-behavior: smooth;
+  /* Fixed pill navbar offset for #about / #project / #contact jumps */
+  scroll-padding-top: 6rem;
 }
 
 /* Lenis smooth-scroll recommended styles */
@@ -56,6 +58,45 @@ body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+
+/* Hero avatar framing: phones are narrow, so `cover` crops the sides hard.
+   Center the subject horizontally and lift it above the bottom text;
+   desktop keeps the original right-of-center framing. */
+.hero-media {
+  object-fit: cover;
+  object-position: 50% 28%;
+}
+
+@media (min-width: 768px) {
+  .hero-media {
+    object-position: 70% center;
+  }
+}
+
+/* Project card image heights: compact side-by-side thumbs on phones,
+   original tall 40/60 composition on sm+. */
+.proj-img-lg,
+.proj-img-sm1,
+.proj-img-sm2 {
+  height: 140px;
+}
+
+.proj-img-lg {
+  height: 220px;
+}
+
+@media (min-width: 640px) {
+  .proj-img-sm1 {
+    height: clamp(130px, 16vw, 230px);
+  }
+  .proj-img-sm2 {
+    height: clamp(160px, 22vw, 340px);
+  }
+  .proj-img-lg {
+    height: calc(clamp(130px, 16vw, 230px) + clamp(160px, 22vw, 340px) + 16px);
+    min-height: 100%;
+  }
 }
 
 @keyframes blink {

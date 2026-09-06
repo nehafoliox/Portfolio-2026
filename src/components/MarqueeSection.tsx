@@ -13,7 +13,7 @@ const ROW2 = Array.from({ length: 10 }, (_, i) => `/marquee/mq-${String(i + 12).
 function Tile({ src, eager }: { src: string; eager?: boolean }) {
   const [loaded, setLoaded] = useState(false);
   return (
-    <div className="w-[280px] h-[180px] sm:w-[420px] sm:h-[270px] max-w-none rounded-2xl overflow-hidden shrink-0 select-none bg-white/[0.06]">
+    <div className="w-[220px] h-[140px] sm:w-[420px] sm:h-[270px] max-w-none rounded-xl sm:rounded-2xl overflow-hidden shrink-0 select-none bg-white/[0.06]">
       <img
         src={src}
         alt=""

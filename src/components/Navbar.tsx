@@ -69,13 +69,13 @@ export const Navbar: React.FC = () => {
   return (
     <nav
       aria-label="Main Navigation"
-      className={`fixed top-5 sm:top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-out ${
+      className={`fixed top-5 sm:top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-out max-w-[calc(100vw-1.5rem)] ${
         isScrolled
           ? 'opacity-100 translate-y-0 pointer-events-auto'
           : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}
     >
-      <div className="inline-flex items-center gap-4 sm:gap-7 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-[#141414]/90 backdrop-blur-md border border-white/[0.14] shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+      <div className="inline-flex items-center gap-2 sm:gap-7 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-[#141414]/90 backdrop-blur-md border border-white/[0.14] shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-w-full overflow-x-auto">
         {/* Monogram Badge (left) */}
         <a
           href="#"
@@ -91,7 +91,7 @@ export const Navbar: React.FC = () => {
         </a>
 
         {/* Links */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           {navLinks.map((link) => {
             const isActive = active === link.id;
             return (
@@ -99,7 +99,7 @@ export const Navbar: React.FC = () => {
                 key={link.label}
                 href={link.href}
                 aria-current={isActive ? 'location' : undefined}
-                className={`text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer rounded-full px-3 py-1.5 ${
+                className={`text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer rounded-full px-2.5 sm:px-3 py-1.5 whitespace-nowrap ${
                   isActive
                     ? 'bg-white text-black'
                     : 'text-[#e0e0e0] hover:text-white hover:bg-white/10'
@@ -114,7 +114,7 @@ export const Navbar: React.FC = () => {
           <a
             href="/Neha_Patel_Resume.pdf"
             download="Neha_Patel_Resume.pdf"
-            className="text-[13px] sm:text-[14px] text-[#e0e0e0] hover:text-white font-medium transition-colors cursor-pointer rounded-full px-3 py-1.5 hover:bg-white/10"
+            className="text-[13px] sm:text-[14px] text-[#e0e0e0] hover:text-white font-medium transition-colors cursor-pointer rounded-full px-2.5 sm:px-3 py-1.5 hover:bg-white/10 whitespace-nowrap"
           >
             Resume
           </a>
