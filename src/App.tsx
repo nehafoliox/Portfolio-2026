@@ -1,13 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import { BackgroundVideo } from './components/BackgroundVideo';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { MarqueeSection } from './components/MarqueeSection';
-import { AboutSection } from './components/AboutSection';
-import { ServicesSection } from './components/ServicesSection';
-import { ProjectsSection } from './components/ProjectsSection';
-import { ContactSection } from './components/ContactSection';
+
+// Below-the-fold sections are code-split so the initial bundle is just
+// hero + nav (~faster FCP/LCP on Vercel). They load in parallel while
+// the user reads the hero.
+const MarqueeSection = lazy(() =>
+  import('./components/MarqueeSection').then((m) => ({ default: m.MarqueeSection }))
+);
+const AboutSection = lazy(() =>
+  import('./components/AboutSection').then((m) => ({ default: m.AboutSection }))
+);
+const ServicesSection = lazy(() =>
+  import('./components/ServicesSection').then((m) => ({ default: m.ServicesSection }))
+);
+const ProjectsSection = lazy(() =>
+  import('./components/ProjectsSection').then((m) => ({ default: m.ProjectsSection }))
+);
+const ContactSection = lazy(() =>
+  import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
+);
 
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -15,20 +29,39 @@ export const App: React.FC = () => {
 
   // Buttery smooth scrolling (Lenis). Uses native scroll under the hood,
   // so position: sticky (pinned hero + stacking cards) keeps working.
-  // Disabled for users who prefer reduced motion.
+  // Disabled for users who prefer reduced motion. Deferred until idle
+  // so it never blocks First Paint.
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-    let raf = requestAnimationFrame(function loop(time: number) {
-      lenis.raf(time);
+    let lenis: Lenis | null = null;
+    let raf = 0;
+    const start = () => {
+      lenis = new Lenis({
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+      const loop = (time: number) => {
+        lenis?.raf(time);
+        raf = requestAnimationFrame(loop);
+      };
       raf = requestAnimationFrame(loop);
-    });
+    };
+    let cleanupIdle: (() => void) | undefined;
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (typeof w.requestIdleCallback === 'function') {
+      const id = w.requestIdleCallback!(start, { timeout: 2000 });
+      cleanupIdle = () => w.cancelIdleCallback?.(id);
+    } else {
+      const t = window.setTimeout(start, 800);
+      cleanupIdle = () => window.clearTimeout(t);
+    }
     return () => {
+      cleanupIdle?.();
       cancelAnimationFrame(raf);
-      lenis.destroy();
+      lenis?.destroy();
     };
   }, []);
 
@@ -90,11 +123,13 @@ export const App: React.FC = () => {
         className="relative rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] overflow-clip"
         style={{ zIndex: 10, background: '#0C0C0C' }}
       >
-        <MarqueeSection />
-        <AboutSection />
-        <ServicesSection />
-        <ProjectsSection />
-        <ContactSection />
+        <Suspense fallback={null}>
+          <MarqueeSection />
+          <AboutSection />
+          <ServicesSection />
+          <ProjectsSection />
+          <ContactSection />
+        </Suspense>
       </div>
     </div>
   );

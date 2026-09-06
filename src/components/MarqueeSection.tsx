@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
  * First 11 files = row 1 (moves RIGHT), remaining 10 = row 2 (moves LEFT).
  */
 
-const drive = (id: string) => `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+const drive = (id: string) => `https://drive.google.com/thumbnail?id=${id}&sz=w400`;
 
 const MARQUEE_IMAGES: string[] = [
   // Row 1 — first 11
@@ -45,27 +45,39 @@ function Tile({ src, seed }: { src: string; seed: string }) {
       src={finalSrc}
       alt=""
       loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+      width={420}
+      height={270}
       draggable={false}
       referrerPolicy="no-referrer"
       onError={() => setErr(true)}
-      className="w-[420px] h-[270px] max-w-none rounded-2xl object-cover shrink-0 select-none pointer-events-none"
+      className="w-[280px] h-[180px] sm:w-[420px] sm:h-[270px] max-w-none rounded-2xl object-cover shrink-0 select-none pointer-events-none"
     />
   );
 }
 
 export const MarqueeSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [offset, setOffset] = useState(0);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
 
+  // Direct DOM transforms (no React state) — zero re-renders on scroll.
   useEffect(() => {
     let raf = 0;
+    let ticking = false;
     const onScroll = () => {
-      cancelAnimationFrame(raf);
+      if (ticking) return;
+      ticking = true;
       raf = requestAnimationFrame(() => {
-        if (!sectionRef.current) return;
+        ticking = false;
+        if (!sectionRef.current || !row1Ref.current || !row2Ref.current) return;
         const sectionTop =
           sectionRef.current.getBoundingClientRect().top + window.scrollY;
-        setOffset((window.scrollY - sectionTop + window.innerHeight) * 0.3);
+        const offset =
+          (window.scrollY - sectionTop + window.innerHeight) * 0.3;
+        row1Ref.current.style.transform = `translate3d(${offset - 200}px,0,0)`;
+        row2Ref.current.style.transform = `translate3d(${-(offset - 200)}px,0,0)`;
       });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -79,9 +91,11 @@ export const MarqueeSection: React.FC = () => {
   const row1 = MARQUEE_IMAGES.slice(0, 11);
   const row2 = MARQUEE_IMAGES.slice(11);
 
+  // Doubled (not tripled) — cuts 63 requests down to 42 with no visual gap
+  // because each row is already wider than the viewport.
   const renderRow = (images: string[], rowKey: string) => {
-    const tripled = [...images, ...images, ...images];
-    return tripled.map((src, i) => (
+    const doubled = [...images, ...images];
+    return doubled.map((src, i) => (
       <Tile key={`${rowKey}-${i}`} src={src} seed={`${rowKey}-${i % images.length}`} />
     ));
   };
@@ -90,26 +104,23 @@ export const MarqueeSection: React.FC = () => {
     <section
       ref={sectionRef}
       className="relative w-full bg-[#0C0C0C] pt-24 sm:pt-32 md:pt-40 pb-10 overflow-hidden"
+      style={{ contentVisibility: 'auto' }}
     >
       <div className="flex flex-col gap-3">
         <div className="overflow-hidden">
           <div
+            ref={row1Ref}
             className="flex gap-3 w-max"
-            style={{
-              transform: `translateX(${offset - 200}px)`,
-              willChange: 'transform',
-            }}
+            style={{ willChange: 'transform' }}
           >
             {renderRow(row1, 'row1')}
           </div>
         </div>
         <div className="overflow-hidden">
           <div
+            ref={row2Ref}
             className="flex gap-3 w-max"
-            style={{
-              transform: `translateX(${-(offset - 200)}px)`,
-              willChange: 'transform',
-            }}
+            style={{ willChange: 'transform' }}
           >
             {renderRow(row2, 'row2')}
           </div>

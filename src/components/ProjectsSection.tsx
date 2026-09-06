@@ -17,42 +17,41 @@ const PROJECTS: Project[] = [
     id: '01',
     name: 'pendragon',
     category: 'Client',
-    col1Img1: '/portfolio images/PR-1_COL1_IMG1.png',
-    col1Img2: '/portfolio images/PR-1_COL1_IMG2.png',
-    col2Img: '/portfolio images/PR-1_COL2.png',
+    col1Img1: '/portfolio images/PR-1_COL1_IMG1.webp',
+    col1Img2: '/portfolio images/PR-1_COL1_IMG2.webp',
+    col2Img: '/portfolio images/PR-1_COL2.webp',
   },
   {
     id: '02',
     name: 'Anime Merch Store',
     category: 'Personal',
-    col1Img1: '/portfolio images/PR-2_COL1_IMG1.png',
-    col1Img2: '/portfolio images/PR-2_COL1_IMG2.png',
-    col2Img: '/portfolio images/PR-2_COL2.png',
+    col1Img1: '/portfolio images/PR-2_COL1_IMG1.webp',
+    col1Img2: '/portfolio images/PR-2_COL1_IMG2.webp',
+    col2Img: '/portfolio images/PR-2_COL2.webp',
   },
   {
     id: '03',
     name: 'Lunexis Studio',
     category: 'Personal',
-    col1Img1: '/portfolio images/PR-3_COL1_IMG1.png',
-    // NOTE: actual file on disk is .jpg (PR-3_COL1_IMG2.png does not exist)
-    col1Img2: '/portfolio images/PR-3_COL1_IMG2.jpg',
-    col2Img: '/portfolio images/PR-3_COL2.png',
+    col1Img1: '/portfolio images/PR-3_COL1_IMG1.webp',
+    col1Img2: '/portfolio images/PR-3_COL1_IMG2.webp',
+    col2Img: '/portfolio images/PR-3_COL2.webp',
   },
   {
     id: '04',
     name: 'Personal Brand Website for a Gamer',
     category: 'Personal',
-    col1Img1: '/portfolio images/PR-4_COL1_IMG1.png',
-    col1Img2: '/portfolio images/PR-4_COL1_IMG2.png',
-    col2Img: '/portfolio images/PR-4_COL2.png',
+    col1Img1: '/portfolio images/PR-4_COL1_IMG1.webp',
+    col1Img2: '/portfolio images/PR-4_COL1_IMG2.webp',
+    col2Img: '/portfolio images/PR-4_COL2.webp',
   },
   {
     id: '05',
     name: 'BOOK HAVEN',
     category: 'Personal',
-    col1Img1: '/portfolio images/PR-5_COL1_IMG1.png',
-    col1Img2: '/portfolio images/PR-5_COL1_IMG2.png',
-    col2Img: '/portfolio images/PR-5_COL2.png',
+    col1Img1: '/portfolio images/PR-5_COL1_IMG1.webp',
+    col1Img2: '/portfolio images/PR-5_COL1_IMG2.webp',
+    col2Img: '/portfolio images/PR-5_COL2.webp',
   },
 ];
 
@@ -61,25 +60,31 @@ function ProjectImage({
   seed,
   className = '',
   style,
+  eager = false,
 }: {
   src: string;
   seed: string;
   className?: string;
   style?: React.CSSProperties;
+  eager?: boolean;
 }) {
   const [err, setErr] = useState(false);
   const fallback = `https://picsum.photos/seed/${seed}/800/600`;
   return (
     <div
       className={`overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ${className}`}
-      style={style}
+      style={{ ...style, contentVisibility: 'auto' as const }}
     >
       <img
         src={err ? fallback : src}
         onError={() => setErr(true)}
         alt=""
-        loading="lazy"
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        fetchPriority={eager ? 'high' : 'low'}
         draggable={false}
+        width={800}
+        height={600}
         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
     </div>
@@ -154,11 +159,13 @@ function ProjectCard({
             <ProjectImage
               src={project.col1Img1}
               seed={`${project.id}-a`}
+              eager={index === 0}
               style={{ height: 'clamp(130px, 16vw, 230px)' }}
             />
             <ProjectImage
               src={project.col1Img2}
               seed={`${project.id}-b`}
+              eager={index === 0}
               style={{ height: 'clamp(160px, 22vw, 340px)' }}
             />
           </div>
@@ -166,6 +173,7 @@ function ProjectCard({
             <ProjectImage
               src={project.col2Img}
               seed={`${project.id}-c`}
+              eager={index === 0}
               className="h-full min-h-full"
               style={{
                 height:

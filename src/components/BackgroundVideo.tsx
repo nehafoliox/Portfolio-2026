@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const VIDEO_URL = '/final.mp4';
+const POSTER_URL = '/video-poster.webp';
 const SENSITIVITY = 0.8;
 
 export const BackgroundVideo: React.FC = () => {
@@ -8,8 +9,36 @@ export const BackgroundVideo: React.FC = () => {
   const targetTimeRef = useRef<number>(0);
   const prevXRef = useRef<number | null>(null);
   const isSeekingRef = useRef<boolean>(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [ready, setReady] = useState(false);
+
+  // Defer video load until browser is idle + skip on data-saver / mobile /
+  // reduced-motion — the poster alone is enough there.
+  useEffect(() => {
+    const saveData =
+      (navigator as unknown as { connection?: { saveData?: boolean } })
+        .connection?.saveData === true;
+    const reduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    const smallScreen = window.matchMedia('(max-width: 768px)').matches;
+    if (saveData || reduced || smallScreen) return;
+
+    const start = () => setShouldLoad(true);
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    if (typeof w.requestIdleCallback === 'function') {
+      const id = w.requestIdleCallback!(start, { timeout: 2500 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = window.setTimeout(start, 1200);
+    return () => window.clearTimeout(t);
+  }, []);
 
   useEffect(() => {
+    if (!shouldLoad) return;
     const handleMouseMove = (e: MouseEvent) => {
       const video = videoRef.current;
       if (!video || isNaN(video.duration) || video.duration === 0) return;
@@ -45,7 +74,7 @@ export const BackgroundVideo: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, [shouldLoad]);
 
   const handleSeeked = () => {
     const video = videoRef.current;
@@ -68,22 +97,48 @@ export const BackgroundVideo: React.FC = () => {
   };
 
   return (
-    <video
-      ref={videoRef}
-      src={VIDEO_URL}
-      muted
-      playsInline
-      preload="auto"
-      onSeeked={handleSeeked}
-      onLoadedMetadata={handleLoadedMetadata}
-      className="fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 0,
-        objectFit: 'cover',
-        objectPosition: '70% center',
-      }}
-    />
+    <>
+      {/* Instant lightweight poster — paints in ~2KB while video defers */}
+      <img
+        src={POSTER_URL}
+        alt=""
+        aria-hidden="true"
+        fetchPriority="high"
+        decoding="async"
+        className="fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 0,
+          objectFit: 'cover',
+          objectPosition: '70% center',
+          opacity: ready ? 0 : 1,
+          transition: 'opacity 0.6s ease',
+        }}
+      />
+      {shouldLoad && (
+        <video
+          ref={videoRef}
+          src={VIDEO_URL}
+          muted
+          playsInline
+          preload="metadata"
+          poster={POSTER_URL}
+          onSeeked={handleSeeked}
+          onLoadedMetadata={handleLoadedMetadata}
+          onCanPlay={() => setReady(true)}
+          className="fixed inset-0 z-0 w-full h-full object-cover pointer-events-none"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 0,
+            objectFit: 'cover',
+            objectPosition: '70% center',
+            opacity: ready ? 1 : 0,
+            transition: 'opacity 0.6s ease',
+          }}
+        />
+      )}
+    </>
   );
 };
