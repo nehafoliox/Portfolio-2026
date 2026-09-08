@@ -72,7 +72,7 @@ function ProjectImage({
   const fallback = `https://picsum.photos/seed/${seed}/800/600`;
   return (
     <div
-      className={`overflow-hidden rounded-3xl sm:rounded-[50px] md:rounded-[60px] ${className}`}
+      className={`overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ${className}`}
       style={{ ...style, contentVisibility: 'auto' as const }}
     >
       <img
@@ -106,9 +106,6 @@ function ProjectCard({
     offset: ['start end', 'start start'],
   });
 
-  // Stacking deck: each card pins and scales down as the next slides over
-  // (same animation on all screens — svh keeps it framed under mobile
-  // browser chrome).
   const targetScale = 1 - (total - 1 - index) * 0.03;
   const scale = useTransform(scrollYProgress, [0, 1], [1, targetScale]);
 
@@ -123,21 +120,18 @@ function ProjectCard({
           '--stack-off': `${index * 28}px`,
         } as unknown as React.CSSProperties
       }
-      // Pinned stacking card — slides under the next card while scaling
-      // down slightly. svh (with vh fallback) keeps 85% sizing correct
-      // under mobile browser chrome.
-      className="stack-card sticky h-[85vh] supports-[height:100svh]:h-[85svh] w-full top-[calc(6rem_+_var(--stack-off))] md:top-[calc(8rem_+_var(--stack-off))] origin-top mb-2 sm:mb-0"
+      className="sticky h-[85vh] w-full top-[calc(6rem_+_var(--stack-off))] md:top-[calc(8rem_+_var(--stack-off))] origin-top"
     >
       <div
         style={{ fontFamily: "'Kanit', sans-serif" }}
-        className="group relative w-full rounded-3xl sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-white hover:shadow-[0_24px_90px_rgba(215,226,234,0.18)]"
+        className="group relative w-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:p-6 md:p-8 overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-white hover:shadow-[0_24px_90px_rgba(215,226,234,0.18)]"
       >
-        {/* Top row — stacks on phones so the CTA never squeezes the title */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 mb-4 sm:mb-6">
-          <div className="flex items-center gap-3 sm:gap-6 min-w-0">
+        {/* Top row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 sm:gap-6 mb-4 sm:mb-6">
+          <div className="flex items-center gap-4 sm:gap-6 min-w-0">
             <span
               className="font-black leading-none text-[#D7E2EA] shrink-0 transition-colors duration-300 group-hover:text-white"
-              style={{ fontSize: 'clamp(2.5rem, 14vw, 140px)' }}
+              style={{ fontSize: 'clamp(3rem, 10vw, 140px)' }}
             >
               {project.id}
             </span>
@@ -146,41 +140,39 @@ function ProjectCard({
                 {project.category}
               </span>
               <h3
-                className="font-medium uppercase text-[#D7E2EA] leading-tight text-balance break-words"
+                className="font-medium uppercase text-[#D7E2EA] leading-tight"
                 style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}
               >
                 {project.name}
               </h3>
             </div>
           </div>
-          <div className="shrink-0 self-start sm:self-auto">
-            <LiveProjectButton />
-          </div>
+          <LiveProjectButton />
         </div>
 
-        {/* Image grid: large preview full-width on top for phones,
-            classic 40/60 split on sm+ */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-[40%_60%]">
-          <div className="col-span-2 order-1 sm:order-2 sm:col-span-1">
-            <ProjectImage
-              src={project.col2Img}
-              seed={`${project.id}-c`}
-              eager={index === 0}
-              className="proj-img-lg"
-            />
-          </div>
-          <div className="col-span-2 order-2 sm:order-1 sm:col-span-1 grid grid-cols-2 gap-3 sm:gap-4 sm:flex sm:flex-col">
+        {/* Bottom row: image grid — Row 1 full-width tall image, Row 2 two images side by side */}
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <ProjectImage
+            src={project.col2Img}
+            seed={`${project.id}-c`}
+            eager={index === 0}
+            style={{ height: 'clamp(160px, 22vw, 340px)' }}
+          />
+          <div
+            className="grid gap-3 sm:gap-4"
+            style={{ gridTemplateColumns: '1fr 1fr' }}
+          >
             <ProjectImage
               src={project.col1Img1}
               seed={`${project.id}-a`}
               eager={index === 0}
-              className="proj-img-sm1"
+              style={{ height: 'clamp(130px, 16vw, 230px)' }}
             />
             <ProjectImage
               src={project.col1Img2}
               seed={`${project.id}-b`}
               eager={index === 0}
-              className="proj-img-sm2"
+              style={{ height: 'clamp(130px, 16vw, 230px)' }}
             />
           </div>
         </div>
@@ -193,19 +185,19 @@ export const ProjectsSection: React.FC = () => {
   const total = PROJECTS.length;
 
   return (
-    <section id="project" className="relative w-full bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 px-5 sm:px-8 md:px-10 pt-12 sm:pt-16 md:pt-20 pb-10 scroll-mt-20">
+    <section id="project" className="relative w-full bg-[#0C0C0C] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 px-5 sm:px-8 md:px-10 pt-12 sm:pt-16 md:pt-20 pb-10">
       <FadeIn className="text-center mb-8 sm:mb-10">
         <h2
-          className="font-black uppercase leading-[0.95] tracking-tight text-white text-balance break-words"
-          style={{ fontSize: 'clamp(2.75rem, 14vw, 160px)' }}
+          className="font-black uppercase leading-none tracking-tight text-white"
+          style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
         >
           Projects
         </h2>
       </FadeIn>
 
-      {/* Stacking deck on sm+ (sticky cards); plain vertical stack on phones
-          where 85vh pinned cards clip under browser chrome. */}
-      <div className="relative max-w-6xl mx-auto bg-[#0C0C0C] flex flex-col sm:block">
+      {/* Single tall stacking container (~5 x 85vh of scrollable height).
+          No fixed height, no overflow clipping — sticky cards need both. */}
+      <div className="relative max-w-6xl mx-auto bg-[#0C0C0C]">
         {PROJECTS.map((project, i) => (
           <ProjectCard
             key={project.id}
