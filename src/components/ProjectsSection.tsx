@@ -85,7 +85,7 @@ function ProjectImage({
         draggable={false}
         width={800}
         height={600}
-        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        className="h-full w-full object-cover rounded-[40px] sm:rounded-[50px] md:rounded-[60px] transition-transform duration-700 ease-out group-hover:scale-105"
       />
     </div>
   );
