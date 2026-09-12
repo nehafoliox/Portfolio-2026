@@ -3,6 +3,7 @@ import Lenis from 'lenis';
 import { BackgroundVideo } from './components/BackgroundVideo';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
+import { Loader } from './components/Loader';
 
 // Below-the-fold sections are code-split so the initial bundle is just
 // hero + nav (~faster FCP/LCP on Vercel). They load in parallel while
@@ -26,6 +27,22 @@ const ContactSection = lazy(() =>
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [heroCovered, setHeroCovered] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Lock scroll while the loader is on screen so the 000->100
+  // sequence reads cleanly and the hero can't peek early.
+  useEffect(() => {
+    if (!loading) return;
+    const prevOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [loading]);
 
   // Buttery smooth scrolling (Lenis). Uses native scroll under the hood,
   // so position: sticky (pinned hero + stacking cards) keeps working.
@@ -94,6 +111,11 @@ export const App: React.FC = () => {
       {/* Fixed video behind everything */}
       <BackgroundVideo />
 
+      {/* Loader — black intro with Design/Create/Inspire + 000-100.
+          Hero gets a fresh key after load so the typewriter restarts
+          only once the loader has slid away. */}
+      {loading && <Loader onComplete={() => setLoading(false)} />}
+
       {/* Floating Scroll-Activated Navbar */}
       <Navbar />
 
@@ -112,7 +134,7 @@ export const App: React.FC = () => {
           visibility: heroCovered ? 'hidden' : 'visible',
         }}
       >
-        <HeroSection />
+        <HeroSection key={loading ? 'loading' : 'ready'} />
       </div>
 
       {/* Black card overlay — slides over the pinned hero on scroll.

@@ -60,6 +60,64 @@ body {
   color: transparent;
 }
 
+/* Loader chase scene keyframes */
+@keyframes loader-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes loader-bob-cat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes loader-cheer {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-6px) scale(1.03); }
+}
+@keyframes loader-wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50% { transform: rotate(6deg); }
+}
+@keyframes loader-leg-a {
+  0%, 100% { transform: rotate(24deg); }
+  50% { transform: rotate(-24deg); }
+}
+@keyframes loader-leg-b {
+  0%, 100% { transform: rotate(-24deg); }
+  50% { transform: rotate(24deg); }
+}
+@keyframes loader-arm {
+  0%, 100% { transform: rotate(8deg); }
+  50% { transform: rotate(-8deg); }
+}
+@keyframes loader-tail {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(14deg); }
+}
+@keyframes loader-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.7; }
+}
+@keyframes loader-dust {
+  0% { opacity: 0.5; transform: translate(0, 0) scale(0.6); }
+  100% { opacity: 0; transform: translate(-34px, -10px) scale(1.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader-anim {
+    animation: none !important;
+  }
+}
+
+/* About section — slow spin for the circular badge */
+@keyframes about-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.about-spin {
+  animation: about-spin 14s linear infinite;
+}
+
 /* Hero character framing: the video frame is pre-cropped around the
    character (see public/hero.mp4), so horizontal center holds on every
    screen — phone, tablet and desktop. Vertical focus drifts toward the

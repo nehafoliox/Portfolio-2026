@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTypewriter } from '../hooks/useTypewriter';
+import Magnet from './Magnet';
 
 const TYPEWRITER_TEXT =
   'hi! I’m Neha\ni basically make screens pretty to live.';
@@ -84,22 +85,24 @@ export const HeroSection: React.FC = () => {
           }}
         >
           {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer"
-            >
-              {link.label}
-            </a>
+            <Magnet key={link.label} strength={4} padding={24} className="mx-[0.2em] mb-[0.4em]">
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-white text-black border border-black/10 rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] whitespace-nowrap hover:bg-black hover:text-white transition-colors duration-200 cursor-pointer"
+              >
+                {link.label}
+              </a>
+            </Magnet>
           ))}
 
+          <Magnet strength={4} padding={24} className="mx-[0.2em] mb-[0.4em] max-w-full">
           <button
             type="button"
             onClick={handleCopyEmail}
             title={copied ? 'Copied to clipboard!' : 'Click to copy email'}
-            className="inline-flex items-center justify-center text-white bg-transparent border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] mx-[0.2em] mb-[0.4em] max-w-full whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer group"
+            className="inline-flex items-center justify-center text-white bg-transparent border border-white rounded-full text-[13px] sm:text-[15px] px-4 sm:px-5 py-[0.3em] max-w-full whitespace-nowrap gap-2 sm:gap-3 hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer group"
           >
             {/* Full email overflows 360px screens — short label on phones. */}
             <span className="sm:hidden">{copied ? 'Copied!' : 'Copy Email'}</span>
@@ -132,6 +135,7 @@ export const HeroSection: React.FC = () => {
               <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
             </svg>
           </button>
+          </Magnet>
         </div>
       </div>
     </section>
