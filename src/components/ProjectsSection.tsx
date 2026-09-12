@@ -57,19 +57,17 @@ const PROJECTS: Project[] = [
 
 function ProjectImage({
   src,
-  seed,
   className = '',
   style,
   eager = false,
 }: {
   src: string;
-  seed: string;
   className?: string;
   style?: React.CSSProperties;
   eager?: boolean;
 }) {
   const [err, setErr] = useState(false);
-  const fallback = `https://picsum.photos/seed/${seed}/800/600`;
+  const fallback = '/marquee/mq-01.webp'; // local file only — never an online image
   return (
     <div
       className={`overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px] ${className}`}
@@ -154,7 +152,6 @@ function ProjectCard({
         <div className="flex flex-col gap-3 sm:gap-4">
           <ProjectImage
             src={project.col2Img}
-            seed={`${project.id}-c`}
             eager={index === 0}
             style={{ height: 'clamp(160px, 22vw, 340px)' }}
           />
@@ -164,13 +161,11 @@ function ProjectCard({
           >
             <ProjectImage
               src={project.col1Img1}
-              seed={`${project.id}-a`}
               eager={index === 0}
               style={{ height: 'clamp(130px, 16vw, 230px)' }}
             />
             <ProjectImage
               src={project.col1Img2}
-              seed={`${project.id}-b`}
               eager={index === 0}
               style={{ height: 'clamp(130px, 16vw, 230px)' }}
             />

@@ -6,7 +6,6 @@ import {
   useMotionValue,
   useScroll,
   useTransform,
-  type MotionValue,
 } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import FadeIn from './FadeIn';
@@ -16,15 +15,6 @@ import Magnet from './Magnet';
 
 const ABOUT_TEXT =
   'With more than 4 years of experience in design, I focus on Web Design, User Experience, and UX Research. I truly enjoy working with businesses that aim to stand out and present their best image. Beyond design, I bring those ideas to life through Design Engineering and AI-Assisted Development, blending creativity with technology to build experiences from concept to reality.';
-
-const DECO = {
-  moon: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png',
-  object:
-    'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png',
-  lego: 'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png',
-  group:
-    'https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png',
-};
 
 const SKILLS = [
   'Web Design',
@@ -43,29 +33,6 @@ const STATS = [
   { value: 100, suffix: '+', label: 'Components built' },
   { value: 5, suffix: '', label: 'Featured projects' },
 ];
-
-/* Floats children with the cursor at a given depth (px at full deflection). */
-function Float({
-  nx,
-  ny,
-  depth,
-  className,
-  children,
-}: {
-  nx: MotionValue<number>;
-  ny: MotionValue<number>;
-  depth: number;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  const x = useTransform(nx, (v) => v * depth);
-  const y = useTransform(ny, (v) => v * depth);
-  return (
-    <motion.div className={className} style={{ x, y }}>
-      {children}
-    </motion.div>
-  );
-}
 
 function Stat({ value, suffix, label, index }: { value: number; suffix: string; label: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -107,11 +74,9 @@ function Stat({ value, suffix, label, index }: { value: number; suffix: string; 
 
 export const AboutSection: React.FC = () => {
   const secRef = useRef<HTMLElement>(null);
-  // Cursor spotlight (px) + normalized drift (-0.5 … 0.5) for parallax.
+  // Cursor spotlight position (px).
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const nx = useMotionValue(0);
-  const ny = useMotionValue(0);
   const glow = useMotionTemplate`radial-gradient(520px circle at ${mx}px ${my}px, rgba(167,139,250,0.13), transparent 70%)`;
 
   const { scrollYProgress } = useScroll({ target: secRef, offset: ['start end', 'end start'] });
@@ -122,8 +87,6 @@ export const AboutSection: React.FC = () => {
     if (!r) return;
     mx.set(e.clientX - r.left);
     my.set(e.clientY - r.top);
-    nx.set((e.clientX - r.left) / r.width - 0.5);
-    ny.set((e.clientY - r.top) / r.height - 0.5);
   };
 
   return (
@@ -145,83 +108,6 @@ export const AboutSection: React.FC = () => {
 
       {/* Cursor spotlight */}
       <motion.div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{ background: glow }} />
-
-      {/* Deco corners — entrance + cursor parallax at different depths */}
-      <FadeIn
-        delay={0.1}
-        duration={0.9}
-        x={-80}
-        y={0}
-        className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] pointer-events-none opacity-60 sm:opacity-100"
-      >
-        <Float nx={nx} ny={ny} depth={44}>
-          <img
-            src={DECO.moon}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="w-[72px] sm:w-[120px] lg:w-[210px] h-auto object-contain select-none"
-            draggable={false}
-          />
-        </Float>
-      </FadeIn>
-
-      <FadeIn
-        delay={0.25}
-        duration={0.9}
-        x={-80}
-        y={0}
-        className="absolute bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] pointer-events-none opacity-60 sm:opacity-100"
-      >
-        <Float nx={nx} ny={ny} depth={-28}>
-          <img
-            src={DECO.object}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="w-[64px] sm:w-[110px] lg:w-[180px] h-auto object-contain select-none"
-            draggable={false}
-          />
-        </Float>
-      </FadeIn>
-
-      <FadeIn
-        delay={0.15}
-        duration={0.9}
-        x={80}
-        y={0}
-        className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] pointer-events-none opacity-60 sm:opacity-100"
-      >
-        <Float nx={nx} ny={ny} depth={-36}>
-          <img
-            src={DECO.lego}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="w-[72px] sm:w-[120px] lg:w-[210px] h-auto object-contain select-none"
-            draggable={false}
-          />
-        </Float>
-      </FadeIn>
-
-      <FadeIn
-        delay={0.3}
-        duration={0.9}
-        x={80}
-        y={0}
-        className="absolute bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] pointer-events-none opacity-60 sm:opacity-100"
-      >
-        <Float nx={nx} ny={ny} depth={24}>
-          <img
-            src={DECO.group}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="w-[80px] sm:w-[130px] lg:w-[220px] h-auto object-contain select-none"
-            draggable={false}
-          />
-        </Float>
-      </FadeIn>
 
       {/* Center content */}
       <div className="relative z-10 flex flex-col items-center gap-10 sm:gap-14 max-w-4xl mx-auto text-center px-2 w-full">
