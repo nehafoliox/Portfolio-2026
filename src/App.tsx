@@ -17,6 +17,9 @@ const FunPage = lazy(() =>
 const ContactSection = lazy(() =>
   import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
 );
+const PandragonCaseStudy = lazy(() =>
+  import('./components/PandragonCaseStudy').then((m) => ({ default: m.PandragonCaseStudy }))
+);
 
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -81,10 +84,11 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  const [page, setPage] = useState<'home' | 'fun'>('home');
+  const [page, setPage] = useState<'home' | 'fun' | 'case-study'>('home');
 
   useEffect(() => {
-    document.title = page === 'fun' ? 'Fun — Neha Patel' : 'Neha Patel — Portfolio';
+    document.title =
+      page === 'fun' ? 'Fun — Neha Patel' : page === 'case-study' ? 'Pandragon — Neha Patel' : 'Neha Patel — Portfolio';
   }, [page]);
 
   // Scroll to a home-page section, retrying while lazy chunks mount.
@@ -104,6 +108,11 @@ export const App: React.FC = () => {
 
   const goFun = () => {
     setPage('fun');
+    window.scrollTo(0, 0);
+  };
+
+  const openStudy = () => {
+    setPage('case-study');
     window.scrollTo(0, 0);
   };
 
@@ -169,17 +178,22 @@ export const App: React.FC = () => {
           deck) keeps sticking to the viewport. overflow:hidden would break it. */}
       <div
         ref={overlayRef}
-        className={`relative overflow-clip ${page === 'home' ? 'rounded-t-[24px] sm:rounded-t-[32px] md:rounded-t-[40px]' : ''}`}
+        className={`relative overflow-clip ${page === 'fun' ? '' : 'rounded-t-[24px] sm:rounded-t-[32px] md:rounded-t-[40px]'}`}
         style={{ zIndex: 10, background: '#0C0C0C' }}
       >
         <Suspense fallback={null}>
           {page === 'home' ? (
             <>
-              <WorkSection />
+              <WorkSection onOpenCaseStudy={openStudy} />
               <ContactSection />
             </>
-          ) : (
+          ) : page === 'fun' ? (
             <FunPage onBack={() => goHome()} />
+          ) : (
+            <>
+              <PandragonCaseStudy onBack={() => goHome()} />
+              <ContactSection />
+            </>
           )}
         </Suspense>
       </div>

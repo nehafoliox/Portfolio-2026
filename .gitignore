@@ -35,3 +35,6 @@ next-env.d.ts
 # Editor directories
 .vscode/
 .idea/
+
+# Raw case-study sources (363MB+ — web versions live in public/pandragon/)
+/Pandragon/

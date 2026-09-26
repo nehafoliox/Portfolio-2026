@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export type Page = 'home' | 'fun';
+export type Page = 'home' | 'fun' | 'case-study';
 
 interface NavbarProps {
   page: Page;
@@ -30,8 +30,8 @@ export const Navbar: React.FC<NavbarProps> = ({ page, onWork, onFun, onContact, 
   // Only runs on the home page; on the fun page Fun stays highlighted.
   // Sections are lazy-loaded, so re-query until all exist.
   useEffect(() => {
-    if (page === 'fun') {
-      setActive('fun');
+    if (page !== 'home') {
+      setActive(page === 'fun' ? 'fun' : null);
       return;
     }
     const ids = ['project', 'contact'];

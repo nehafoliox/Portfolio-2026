@@ -32,12 +32,26 @@ const WORK_PROJECTS: WorkProject[] = [
   },
 ];
 
-function WorkCard({ project }: { project: WorkProject }) {
+function WorkCard({ project, onOpen }: { project: WorkProject; onOpen?: () => void }) {
   const [err, setErr] = useState(false);
   return (
     <article
       id={project.slug}
       data-cursor="view-case-study"
+      onClick={onOpen}
+      onKeyDown={
+        onOpen
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onOpen();
+              }
+            }
+          : undefined
+      }
+      tabIndex={onOpen ? 0 : undefined}
+      role={onOpen ? 'link' : undefined}
+      aria-label={onOpen ? `View ${project.title} case study` : undefined}
       className="group block transition-all duration-300 ease-in-out cursor-pointer"
     >
       <div className="flex flex-col gap-2">
@@ -45,7 +59,20 @@ function WorkCard({ project }: { project: WorkProject }) {
           className={`relative w-full ${project.aspect} rounded-none border-0 overflow-hidden box-border transition-all duration-300 ease-in-out`}
         >
           <div className="relative w-full h-full overflow-hidden" role="img" aria-label={project.title}>
-            {project.image !== '' && !err ? (
+            {project.slug === 'pandragon-internship' ? (
+              <video
+                src="/pandragon/pandragon-card.mp4"
+                poster={project.image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                tabIndex={-1}
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              />
+            ) : project.image !== '' && !err ? (
               <img
                 src={project.image}
                 alt={project.title}
@@ -100,7 +127,9 @@ function WorkCard({ project }: { project: WorkProject }) {
   );
 }
 
-export const WorkSection: React.FC = () => {
+export const WorkSection: React.FC<{ onOpenCaseStudy?: () => void }> = ({
+  onOpenCaseStudy,
+}) => {
   const left = [WORK_PROJECTS[0], WORK_PROJECTS[2]];
   const right = [WORK_PROJECTS[1]];
   return (
@@ -115,7 +144,11 @@ export const WorkSection: React.FC = () => {
         <div className="grid grid-cols-1 gap-6 transition-all duration-300 ease-in-out lg:grid-cols-2 lg:gap-5">
           <div className="flex flex-col gap-6">
             {left.map((p) => (
-              <WorkCard key={p.slug} project={p} />
+              <WorkCard
+                key={p.slug}
+                project={p}
+                onOpen={p.slug === 'pandragon-internship' ? onOpenCaseStudy : undefined}
+              />
             ))}
           </div>
           <div className="flex flex-col gap-6">
