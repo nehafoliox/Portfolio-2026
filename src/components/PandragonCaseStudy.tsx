@@ -15,37 +15,23 @@ const NAV = [
   { id: 'reflection', label: 'Reflection' },
 ];
 
-function Figure({
-  src,
-  alt,
-  caption,
-}: {
-  src: string | string[];
-  alt: string;
-  caption?: string;
-}) {
-  const imgs = Array.isArray(src) ? src : [src];
+function ExpandIcon() {
   return (
-    <figure className="my-8 sm:my-10">
-      <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-        {imgs.map((s) => (
-          <img
-            key={s}
-            src={s}
-            alt={alt}
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-            className="block h-auto w-full"
-          />
-        ))}
-      </div>
-      {caption ? (
-        <figcaption className="rachel-mono mt-3 text-center text-xs uppercase tracking-[0.12em] text-neutral-500">
-          {caption}
-        </figcaption>
-      ) : null}
-    </figure>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-3.5 w-3.5"
+    >
+      <path d="M15 3h6v6" />
+      <path d="M9 21H3v-6" />
+      <path d="M21 3l-7 7" />
+      <path d="M3 21l7-7" />
+    </svg>
   );
 }
 
@@ -102,6 +88,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }) => {
   const [active, setActive] = useState<string>(NAV[0].id);
+  const [lightbox, setLightbox] = useState<{ src: string[]; caption?: string } | null>(null);
 
   // Scroll-spy: highlight the nav link for the section currently in view.
   useEffect(() => {
@@ -129,6 +116,70 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
+
+  // Lightbox: ESC to close + lock page scroll while open.
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null);
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [lightbox]);
+
+  // Compact preview box — click opens the full design in an overlay frame.
+  const Figure = ({ src, alt, caption }: { src: string | string[]; alt: string; caption?: string }) => {
+    const imgs = Array.isArray(src) ? src : [src];
+    return (
+      <figure className="my-8 sm:my-10">
+        <button
+          type="button"
+          onClick={() => setLightbox({ src: imgs, caption })}
+          data-cursor="expand"
+          aria-label={`Expand screenshot: ${alt}`}
+          className="group relative block h-72 w-full cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] text-left sm:h-96"
+        >
+          {imgs.length > 1 ? (
+            <div className="flex h-full w-full">
+              {imgs.map((s) => (
+                <img
+                  key={s}
+                  src={s}
+                  alt={alt}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                  className="h-full w-1/2 object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                />
+              ))}
+            </div>
+          ) : (
+            <img
+              src={imgs[0]}
+              alt={alt}
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+              className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+            />
+          )}
+          <span className="rachel-mono absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-[#e65f2e] px-3 py-1.5 text-[11px] uppercase tracking-[0.12em] text-white">
+            <ExpandIcon /> Expand
+          </span>
+        </button>
+        {caption ? (
+          <figcaption className="rachel-mono mt-3 text-center text-xs uppercase tracking-[0.12em] text-neutral-500">
+            {caption}
+          </figcaption>
+        ) : null}
+      </figure>
+    );
+  };
 
   return (
     <article className="relative w-full" style={{ background: '#0C0C0C' }}>
@@ -597,6 +648,49 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           </div>
         </div>
       </div>
+
+      {/* Full-design overlay — scroll inside the frame, page stays put */}
+      {lightbox && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.caption ?? 'Design preview'}
+        >
+          <button
+            type="button"
+            aria-label="Close preview"
+            onClick={() => setLightbox(null)}
+            className="absolute inset-0 cursor-pointer bg-black/80 backdrop-blur-sm"
+          />
+          <div className="relative flex max-h-[88vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#111]">
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-5 py-3">
+              <p className="rachel-mono truncate text-xs uppercase tracking-[0.15em] text-neutral-300">
+                {lightbox.caption ?? 'Design preview'}
+              </p>
+              <button
+                type="button"
+                autoFocus
+                onClick={() => setLightbox(null)}
+                className="rachel-mono shrink-0 cursor-pointer rounded-full border border-white/20 px-4 py-1.5 text-xs uppercase tracking-[0.15em] text-white transition-colors hover:border-[#e65f2e] hover:text-[#e65f2e]"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <div data-lenis-prevent className="overflow-y-auto">
+              {lightbox.src.map((s) => (
+                <img
+                  key={s}
+                  src={s}
+                  alt={lightbox.caption ?? 'Full design screenshot'}
+                  draggable={false}
+                  className="block h-auto w-full"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </article>
   );
 };
