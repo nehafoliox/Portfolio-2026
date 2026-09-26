@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export const ContactSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const handleCopyEmail = async () => {
     try {
@@ -22,7 +23,7 @@ export const ContactSection: React.FC = () => {
       <div className="max-w-5xl mx-auto w-full">
         <div className="flex items-center gap-3 mb-8">
           <span className="w-2.5 h-2.5 rounded-full bg-white/80" />
-          <span className="text-xs uppercase tracking-[0.2em] text-neutral-400 font-medium">
+          <span className="text-xs uppercase tracking-[0.2em] text-white font-medium">
             Let’s Connect
           </span>
         </div>
@@ -107,21 +108,31 @@ export const ContactSection: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-500">
             <span className="font-bold">Designed + Coded with</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="heart-hover transition-all duration-300 hover:text-[#e65f2e]"
-              aria-label="love"
+            <button
+              type="button"
+              onClick={() => setLiked((v) => !v)}
+              aria-label="Like"
+              aria-pressed={liked}
+              className="inline-flex items-center justify-center cursor-pointer"
             >
-              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill={liked ? '#e65f2e' : 'none'}
+                stroke={liked ? '#e65f2e' : 'currentColor'}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`heart-hover transition-all duration-300 ${
+                  liked ? 'text-[#e65f2e]' : 'hover:text-[#e65f2e]'
+                }`}
+                aria-label="love"
+              >
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
+            </button>
             <span>by Neha</span>
           </div>
         </div>

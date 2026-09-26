@@ -77,7 +77,23 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <div ref={dotRef} aria-hidden="true" className={className}>
-      {label ? <span className="custom-cursor__label">{label}</span> : null}
+      {label ? (
+        <span className="custom-cursor__label rachel-mono">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          {label}
+        </span>
+      ) : null}
     </div>
   );
 };

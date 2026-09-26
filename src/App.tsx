@@ -163,12 +163,13 @@ export const App: React.FC = () => {
       )}
 
       {/* Black card overlay — slides over the pinned hero on scroll.
+          Rounded top + tall black lead-in matches the reference screenshot.
           NOTE: overflow: clip (NOT hidden) clips the rounded corners without
           creating a scroll container, so position: sticky inside (project
           deck) keeps sticking to the viewport. overflow:hidden would break it. */}
       <div
         ref={overlayRef}
-        className={`relative overflow-clip ${page === 'home' ? 'rounded-t-[28px] sm:rounded-t-[50px] md:rounded-t-[60px]' : ''}`}
+        className={`relative overflow-clip ${page === 'home' ? 'rounded-t-[24px] sm:rounded-t-[32px] md:rounded-t-[40px]' : ''}`}
         style={{ zIndex: 10, background: '#0C0C0C' }}
       >
         <Suspense fallback={null}>

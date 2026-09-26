@@ -37,12 +37,12 @@ function WorkCard({ project }: { project: WorkProject }) {
   return (
     <article
       id={project.slug}
-      data-cursor="case-study"
+      data-cursor="view-case-study"
       className="group block transition-all duration-300 ease-in-out cursor-pointer"
     >
       <div className="flex flex-col gap-2">
         <div
-          className={`relative w-full ${project.aspect} border border-white/10 overflow-hidden box-border transition-all duration-300 ease-in-out`}
+          className={`relative w-full ${project.aspect} rounded-none border-0 overflow-hidden box-border transition-all duration-300 ease-in-out`}
         >
           <div className="relative w-full h-full overflow-hidden" role="img" aria-label={project.title}>
             {project.image !== '' && !err ? (
@@ -110,7 +110,9 @@ export const WorkSection: React.FC = () => {
       style={{ background: '#0C0C0C' }}
     >
       <div className="max-w-[1800px] mx-auto w-full">
-        <div className="grid grid-cols-1 gap-6 transition-all duration-300 ease-in-out lg:grid-cols-2">
+        {/* Overlapping stagger — layout itself follows the stepped shape from
+            the reference (left higher, smooth drop to lower right). No stroke. */}
+        <div className="grid grid-cols-1 gap-6 transition-all duration-300 ease-in-out lg:grid-cols-2 lg:gap-5">
           <div className="flex flex-col gap-6">
             {left.map((p) => (
               <WorkCard key={p.slug} project={p} />

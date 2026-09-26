@@ -134,9 +134,11 @@ p {
   opacity: 1;
 }
 .custom-cursor--hot {
-  width: 44px;
-  height: 44px;
-  opacity: 0.9;
+  width: 24px;
+  height: 24px;
+  opacity: 0.4;
+  background-color: #e65f2e;
+  border-color: transparent;
 }
 .custom-cursor--pill {
   width: auto;
@@ -145,11 +147,20 @@ p {
   opacity: 1;
 }
 .custom-cursor__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   line-height: 1;
+  white-space: nowrap;
+}
+.custom-cursor__label svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 #root {
