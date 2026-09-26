@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-export const Navbar: React.FC = () => {
+export type Page = 'home' | 'fun';
+
+interface NavbarProps {
+  page: Page;
+  onWork: () => void;
+  onFun: () => void;
+  onContact: () => void;
+  onHome: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ page, onWork, onFun, onContact, onHome }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [active, setActive] = useState<string | null>(null);
 
@@ -17,9 +27,14 @@ export const Navbar: React.FC = () => {
   }, []);
 
   // Scroll-spy: highlight the link for the section currently in view.
-  // Sections are lazy-loaded, so re-query until all three exist.
+  // Only runs on the home page; on the fun page Fun stays highlighted.
+  // Sections are lazy-loaded, so re-query until all exist.
   useEffect(() => {
-    const ids = ['about', 'project', 'contact'];
+    if (page === 'fun') {
+      setActive('fun');
+      return;
+    }
+    const ids = ['project', 'contact'];
     let observer: IntersectionObserver | null = null;
     let tries = 0;
 
@@ -58,12 +73,12 @@ export const Navbar: React.FC = () => {
 
     observe();
     return () => observer?.disconnect();
-  }, []);
+  }, [page]);
 
   const navLinks = [
-    { label: 'About', href: '#about', id: 'about' },
-    { label: 'Project', href: '#project', id: 'project' },
-    { label: 'Contact', href: '#contact', id: 'contact' },
+    { label: 'Work', id: 'project', onClick: onWork },
+    { label: 'Fun', id: 'fun', onClick: onFun },
+    { label: 'Contact', id: 'contact', onClick: onContact },
   ];
 
   return (
@@ -77,27 +92,29 @@ export const Navbar: React.FC = () => {
     >
       <div className="inline-flex items-center gap-2 sm:gap-7 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-2xl bg-[#141414]/90 backdrop-blur-md border border-white/[0.14] shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-w-full overflow-x-auto">
         {/* Monogram Badge (left) */}
-        <a
-          href="#"
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-black rounded-lg border border-white/10 hover:border-white/30 transition-colors flex-shrink-0"
+        <button
+          type="button"
+          onClick={onHome}
+          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-black rounded-lg border border-white/10 hover:border-white/30 transition-colors flex-shrink-0 cursor-pointer"
           aria-label="Home"
         >
           <span
             className="font-bold text-white text-[15px] sm:text-[16px] tracking-tight select-none leading-none"
-            style={{ fontFamily: "'Kanit', sans-serif" }}
+            style={{ fontFamily: "'Geist', system-ui, sans-serif" }}
           >
             NP
           </span>
-        </a>
+        </button>
 
         {/* Links */}
         <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           {navLinks.map((link) => {
             const isActive = active === link.id;
             return (
-              <a
+              <button
                 key={link.label}
-                href={link.href}
+                type="button"
+                onClick={link.onClick}
                 aria-current={isActive ? 'location' : undefined}
                 className={`text-[13px] sm:text-[14px] font-medium transition-all duration-200 cursor-pointer rounded-full px-2.5 sm:px-3 py-1.5 whitespace-nowrap ${
                   isActive
@@ -106,7 +123,7 @@ export const Navbar: React.FC = () => {
                 }`}
               >
                 {link.label}
-              </a>
+              </button>
             );
           })}
 

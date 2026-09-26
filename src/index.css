@@ -41,10 +41,115 @@ html.lenis body {
 }
 
 body {
-  font-family: 'Kanit', sans-serif;
+  font-family: 'Geist', 'Geist Fallback', system-ui, -apple-system, sans-serif;
   background-color: #0c0c0c;
   color: #fff;
   overflow-x: clip;
+}
+
+/* Rachel font system — Tiempos-style serif headings, Geist body, Geist Mono meta */
+h1,
+h2,
+h3,
+.rachel-serif {
+  font-family: 'Tiempos Text', 'Crimson Pro', Georgia, 'Times New Roman', serif;
+  letter-spacing: -0.02em;
+}
+
+h4,
+.rachel-mono {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+p {
+  font-family: 'Geist', system-ui, sans-serif;
+}
+
+/* Rachel link hover — signature orange */
+:root {
+  --rachel-primary: #e65f2e;
+}
+
+::selection {
+  color: var(--rachel-primary);
+  background-color: rgba(230, 95, 46, 0.15);
+}
+
+/* Rachel heart hover */
+@keyframes heartRotateY {
+  0% { transform: rotateY(0); }
+  to { transform: rotateY(360deg); }
+}
+.heart-hover:hover {
+  animation: heartRotateY 0.6s ease-in-out;
+}
+
+/* Hero title keyword — Rachel-style italic accent with orange hover */
+.rachel-hero-keyword {
+  font-style: italic;
+  transition: color 0.2s ease;
+}
+.rachel-hero-title:hover .rachel-hero-keyword {
+  color: #e65f2e;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rachel-hero-keyword {
+    transition: none;
+  }
+}
+
+/* Custom cursor — Rachel-style dot that grows into a labeled pill.
+   Native cursor is hidden on desktop (fine pointer) only. */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+.custom-cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e65f2e;
+  color: #fff;
+  border-radius: 999px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    width 0.2s ease-out,
+    height 0.2s ease-out,
+    padding 0.2s ease-out,
+    opacity 0.2s ease-out;
+}
+.custom-cursor--on {
+  opacity: 1;
+}
+.custom-cursor--hot {
+  width: 44px;
+  height: 44px;
+  opacity: 0.9;
+}
+.custom-cursor--pill {
+  width: auto;
+  height: auto;
+  padding: 10px 18px;
+  opacity: 1;
+}
+.custom-cursor__label {
+  font-family: 'Geist Mono', ui-monospace, monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 #root {

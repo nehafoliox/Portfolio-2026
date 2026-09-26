@@ -3,22 +3,16 @@ import Lenis from 'lenis';
 import { BackgroundVideo } from './components/BackgroundVideo';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { Loader } from './components/Loader';
+import { CustomCursor } from './components/CustomCursor';
 
 // Below-the-fold sections are code-split so the initial bundle is just
 // hero + nav (~faster FCP/LCP on Vercel). They load in parallel while
 // the user reads the hero.
-const MarqueeSection = lazy(() =>
-  import('./components/MarqueeSection').then((m) => ({ default: m.MarqueeSection }))
+const WorkSection = lazy(() =>
+  import('./components/WorkSection').then((m) => ({ default: m.WorkSection }))
 );
-const AboutSection = lazy(() =>
-  import('./components/AboutSection').then((m) => ({ default: m.AboutSection }))
-);
-const ServicesSection = lazy(() =>
-  import('./components/ServicesSection').then((m) => ({ default: m.ServicesSection }))
-);
-const ProjectsSection = lazy(() =>
-  import('./components/ProjectsSection').then((m) => ({ default: m.ProjectsSection }))
+const FunPage = lazy(() =>
+  import('./components/FunPage').then((m) => ({ default: m.FunPage }))
 );
 const ContactSection = lazy(() =>
   import('./components/ContactSection').then((m) => ({ default: m.ContactSection }))
@@ -27,22 +21,6 @@ const ContactSection = lazy(() =>
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [heroCovered, setHeroCovered] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  // Lock scroll while the loader is on screen so the 000->100
-  // sequence reads cleanly and the hero can't peek early.
-  useEffect(() => {
-    if (!loading) return;
-    const prevOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    window.scrollTo(0, 0);
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
-    };
-  }, [loading]);
 
   // Buttery smooth scrolling (Lenis). Uses native scroll under the hood,
   // so position: sticky (pinned hero + stacking cards) keeps working.
@@ -103,6 +81,47 @@ export const App: React.FC = () => {
     };
   }, []);
 
+  const [page, setPage] = useState<'home' | 'fun'>('home');
+
+  useEffect(() => {
+    document.title = page === 'fun' ? 'Fun — Neha Patel' : 'Neha Patel — Portfolio';
+  }, [page]);
+
+  // Scroll to a home-page section, retrying while lazy chunks mount.
+  const scrollToId = (id: string) => {
+    let tries = 0;
+    const attempt = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (tries < 6) {
+        tries += 1;
+        window.setTimeout(attempt, 250);
+      }
+    };
+    attempt();
+  };
+
+  const goFun = () => {
+    setPage('fun');
+    window.scrollTo(0, 0);
+  };
+
+  const goHome = (anchor?: string) => {
+    if (page !== 'home') {
+      setPage('home');
+      if (anchor) {
+        window.setTimeout(() => scrollToId(anchor), 150);
+      } else {
+        window.scrollTo(0, 0);
+      }
+    } else if (anchor) {
+      scrollToId(anchor);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div
       className="relative min-h-screen w-full text-white"
@@ -111,18 +130,23 @@ export const App: React.FC = () => {
       {/* Fixed video behind everything */}
       <BackgroundVideo />
 
-      {/* Loader — black intro with Design/Create/Inspire + 000-100.
-          Hero gets a fresh key after load so the typewriter restarts
-          only once the loader has slid away. */}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      {/* Custom cursor (Rachel-style) */}
+      <CustomCursor />
 
       {/* Floating Scroll-Activated Navbar */}
-      <Navbar />
+      <Navbar
+        page={page}
+        onWork={() => goHome('project')}
+        onFun={goFun}
+        onContact={() => goHome('contact')}
+        onHome={() => goHome()}
+      />
 
       {/* Pinned Hero — header details stay fixed in place while scrolling.
           HeroSection itself is untouched; this sticky wrapper pins it so the
           black card below slides OVER it instead of pushing it away.
           100svh keeps the avatar framed under mobile browser chrome. */}
+      {page === 'home' && (
       <div
         aria-hidden={heroCovered || undefined}
         className="h-screen supports-[height:100svh]:h-[100svh]"
@@ -134,8 +158,9 @@ export const App: React.FC = () => {
           visibility: heroCovered ? 'hidden' : 'visible',
         }}
       >
-        <HeroSection key={loading ? 'loading' : 'ready'} />
+        <HeroSection />
       </div>
+      )}
 
       {/* Black card overlay — slides over the pinned hero on scroll.
           NOTE: overflow: clip (NOT hidden) clips the rounded corners without
@@ -143,15 +168,18 @@ export const App: React.FC = () => {
           deck) keeps sticking to the viewport. overflow:hidden would break it. */}
       <div
         ref={overlayRef}
-        className="relative rounded-t-[28px] sm:rounded-t-[50px] md:rounded-t-[60px] overflow-clip"
+        className={`relative overflow-clip ${page === 'home' ? 'rounded-t-[28px] sm:rounded-t-[50px] md:rounded-t-[60px]' : ''}`}
         style={{ zIndex: 10, background: '#0C0C0C' }}
       >
         <Suspense fallback={null}>
-          <MarqueeSection />
-          <AboutSection />
-          <ServicesSection />
-          <ProjectsSection />
-          <ContactSection />
+          {page === 'home' ? (
+            <>
+              <WorkSection />
+              <ContactSection />
+            </>
+          ) : (
+            <FunPage onBack={() => goHome()} />
+          )}
         </Suspense>
       </div>
     </div>

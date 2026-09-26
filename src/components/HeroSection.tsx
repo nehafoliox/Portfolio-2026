@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useTypewriter } from '../hooks/useTypewriter';
 import Magnet from './Magnet';
 
-const TYPEWRITER_TEXT =
-  'hi! I’m Neha\ni basically make screens pretty to live.';
+const TITLE_BEFORE = 'Hi, I’m Neha, a product designer who ';
+const TITLE_KEYWORD = 'engineers.';
+const TYPEWRITER_TEXT = TITLE_BEFORE + TITLE_KEYWORD;
 
 export const HeroSection: React.FC = () => {
   const { displayed, done } = useTypewriter(TYPEWRITER_TEXT, 38, 600);
@@ -31,7 +32,8 @@ export const HeroSection: React.FC = () => {
   const socialLinks = [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/nehafolio' },
     { label: 'Behance', href: 'https://www.behance.net/nehafoliox' },
-    { label: 'Instagram', href: 'https://www.instagram.com/nehafoliox/' },
+    { label: 'GitHub', href: 'https://github.com/nehafoliox' },
+    { label: 'X', href: 'https://x.com/nehafolio?s=11' },
   ];
 
   return (
@@ -57,23 +59,31 @@ export const HeroSection: React.FC = () => {
         }}
       />
       <div className="max-w-xl relative z-10 w-full">
-        {/* 1. Typewriter text */}
-        <p
-          className="text-white mb-5 sm:mb-6 min-h-[76px] sm:min-h-[84px] whitespace-pre-line text-balance"
+        {/* 1. Typewriter text — Rachel serif + hover accent.
+            Segments are pre-split so the italic <em> exists from the first
+            keystroke: no string-to-element swap (and no flicker) mid-typing.
+            min-h reserves the full 2–3 line height so the pill buttons
+            never jump while lines wrap during typing. */}
+        <h1
+          className="rachel-serif rachel-hero-title text-white mb-5 sm:mb-6 min-h-[110px] sm:min-h-[130px] text-balance"
           style={{
-            fontSize: 'clamp(18px, 4vw, 26px)',
-            lineHeight: 1.35,
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
             fontWeight: 400,
           }}
         >
-          {displayed}
+          {displayed.slice(0, TITLE_BEFORE.length)}
+          <em className="rachel-hero-keyword">
+            {displayed.slice(TITLE_BEFORE.length, TITLE_BEFORE.length + TITLE_KEYWORD.length)}
+          </em>
           {!done && (
             <span
               className="inline-block w-[2px] h-[1.1em] bg-white align-middle ml-[2px] cursor-blink"
               aria-hidden="true"
             />
           )}
-        </p>
+        </h1>
 
         {/* 3. Action pill buttons */}
         <div

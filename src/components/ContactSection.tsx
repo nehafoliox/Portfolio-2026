@@ -28,15 +28,14 @@ export const ContactSection: React.FC = () => {
         </div>
 
         <h2
-          className="font-light tracking-tight mb-8 text-balance"
+          className="rachel-serif font-light tracking-tight mb-8 text-balance"
           style={{
-            fontFamily: "'Kanit', sans-serif",
             fontSize: 'clamp(2rem, 8vw, 4.5rem)',
             lineHeight: 1.1,
           }}
         >
           Ready to make your product{' '}
-          <span className="italic text-neutral-300" style={{ fontFamily: "'Kanit', sans-serif" }}>unforgettable</span>?
+          <span className="italic text-neutral-300">unforgettable</span>?
         </h2>
 
         <p className="text-base sm:text-lg text-neutral-400 max-w-xl mb-10 sm:mb-12">
@@ -69,14 +68,14 @@ export const ContactSection: React.FC = () => {
           </a>
         </div>
 
-        {/* Social Links Grid */}
+        {/* Social Links Grid — same layout, Rachel-style hover */}
         <div className="pt-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 text-sm text-neutral-400">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <a
               href="https://www.linkedin.com/in/nehafolio"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="hover:text-[#e65f2e] transition-colors"
             >
               LinkedIn
             </a>
@@ -84,30 +83,46 @@ export const ContactSection: React.FC = () => {
               href="https://www.behance.net/nehafoliox"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="hover:text-[#e65f2e] transition-colors"
             >
               Behance
             </a>
             <a
-              href="https://www.instagram.com/nehafoliox/"
+              href="https://github.com/nehafoliox"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="hover:text-[#e65f2e] transition-colors"
             >
-              Instagram
+              GitHub
             </a>
             <a
-              href="https://dribbble.com/nehafoliox"
+              href="https://x.com/nehafolio?s=11"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-white transition-colors"
+              className="hover:text-[#e65f2e] transition-colors"
             >
-              Dribbble
+              X
             </a>
           </div>
 
-          <div className="text-xs text-neutral-500">
-            © {new Date().getFullYear()} Neha Patel. Designed with intention.
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-neutral-500">
+            <span className="font-bold">Designed + Coded with</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="heart-hover transition-all duration-300 hover:text-[#e65f2e]"
+              aria-label="love"
+            >
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            </svg>
+            <span>by Neha</span>
           </div>
         </div>
       </div>
