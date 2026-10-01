@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FadeIn } from './FadeIn';
 
 type WorkProject = {
   slug: string;
@@ -27,7 +28,7 @@ const WORK_PROJECTS: WorkProject[] = [
     slug: 'lunexis-studio',
     title: 'Lunexis Studio',
     meta: 'Creative Studio Platform • Personal Project 2025',
-    image: '/portfolio images/PR-3_COL2.webp',
+    image: '/Lunexis/hero.webp',
     aspect: 'aspect-[10/7]',
   },
 ];
@@ -63,6 +64,32 @@ function WorkCard({ project, onOpen }: { project: WorkProject; onOpen?: () => vo
               <video
                 src="/pandragon/pandragon-card.mp4"
                 poster={project.image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                tabIndex={-1}
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              />
+            ) : project.slug === 'aniart' ? (
+              <video
+                src="/AniArt/aniart-card.mp4"
+                poster="/AniArt/hero.webp"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+                tabIndex={-1}
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              />
+            ) : project.slug === 'lunexis-studio' ? (
+              <video
+                src="/Lunexis/lunexis-card.mp4"
+                poster="/Lunexis/hero.webp"
                 autoPlay
                 muted
                 loop
@@ -127,7 +154,7 @@ function WorkCard({ project, onOpen }: { project: WorkProject; onOpen?: () => vo
   );
 }
 
-export const WorkSection: React.FC<{ onOpenCaseStudy?: () => void }> = ({
+export const WorkSection: React.FC<{ onOpenCaseStudy?: (slug: string) => void }> = ({
   onOpenCaseStudy,
 }) => {
   const left = [WORK_PROJECTS[0], WORK_PROJECTS[2]];
@@ -143,17 +170,24 @@ export const WorkSection: React.FC<{ onOpenCaseStudy?: () => void }> = ({
             the reference (left higher, smooth drop to lower right). No stroke. */}
         <div className="grid grid-cols-1 gap-6 transition-all duration-300 ease-in-out lg:grid-cols-2 lg:gap-5">
           <div className="flex flex-col gap-6">
-            {left.map((p) => (
-              <WorkCard
-                key={p.slug}
-                project={p}
-                onOpen={p.slug === 'pandragon-internship' ? onOpenCaseStudy : undefined}
-              />
+            {left.map((p, i) => (
+              <FadeIn key={p.slug} delay={i * 0.12} y={48}>
+                <WorkCard
+                  project={p}
+                  onOpen={
+                    p.slug === 'pandragon-internship' || p.slug === 'lunexis-studio'
+                      ? () => onOpenCaseStudy?.(p.slug)
+                      : undefined
+                  }
+                />
+              </FadeIn>
             ))}
           </div>
           <div className="flex flex-col gap-6">
-            {right.map((p) => (
-              <WorkCard key={p.slug} project={p} />
+            {right.map((p, i) => (
+              <FadeIn key={p.slug} delay={(i + 1) * 0.12} y={48}>
+                <WorkCard key={p.slug} project={p} onOpen={() => onOpenCaseStudy?.(p.slug)} />
+              </FadeIn>
             ))}
           </div>
         </div>

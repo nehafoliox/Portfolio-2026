@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface PandragonCaseStudyProps {
+interface AniArtCaseStudyProps {
   onBack: () => void;
 }
 
@@ -14,11 +14,6 @@ const NAV = [
   { id: 'final', label: 'Final Designs' },
   { id: 'reflection', label: 'Reflection' },
 ];
-
-const FIGMA_PROTO_URL =
-  'https://www.figma.com/proto/EL3E6lApC11Zs2bmIMwuXY/fashion?node-id=1-2966&p=f&viewport=-12588%2C-10553%2C0.53&t=MTKpqK2URl7pF2uX-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=1%3A2966&page-id=0%3A1';
-
-const FIGMA_EMBED_URL = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(FIGMA_PROTO_URL)}`;
 
 function ExpandIcon() {
   return (
@@ -91,7 +86,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }) => {
+export const AniArtCaseStudy: React.FC<AniArtCaseStudyProps> = ({ onBack }) => {
   const [active, setActive] = useState<string>(NAV[0].id);
   const [lightbox, setLightbox] = useState<{ src: string[]; caption?: string } | null>(null);
 
@@ -203,15 +198,15 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             ← Back to work
           </button>
           <p className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-400">
-            Pandragon • Shipped 06/2026 – 09/2026
+            Ani Art • Personal Project 2025
           </p>
         </div>
         <h1
           className="rachel-serif mt-4 text-balance font-light tracking-tight text-white"
           style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', lineHeight: 1.08 }}
         >
-          Designing an e-commerce experience people could{' '}
-          <em className="italic">actually trust</em>
+          Designing a homepage that makes anime fans feel like they&apos;re{' '}
+          <em className="italic">shopping inside the anime world</em>
         </h1>
 
         {/* Meta — Role / Timeline / Team / Tools, Skills full row */}
@@ -227,37 +222,39 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           <div>
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Timeline</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              June 2026 – September 2026
+              4–5 days
               <br />
-              (3 months, Internship)
+              (Personal project)
             </dd>
           </div>
           <div>
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Team</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              Founders / Stakeholders
+              Solo
               <br />
-              Dev team (handoff)
-              <br />
-              1 Designer (me!)
+              (personal project)
             </dd>
           </div>
           <div>
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Tools</dt>
-            <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">Figma</dd>
+            <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
+              Figma (design)
+              <br />
+              Competitor sites (research)
+            </dd>
           </div>
           <div className="col-span-2 md:col-span-4">
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Skills</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              UI/UX Design · Wireframing · Design Systems · User Research · Visual Design
-              (from scratch — no existing brand identity)
+              UI Design · Market/Competitor Research · Visual Design · Information Architecture
+              (homepage only — UI + research exercise)
             </dd>
           </div>
         </dl>
 
         <VideoFigure
-          src="/pandragon/pandragon-card.mp4"
-          caption="Pandragon — project teaser"
+          src="/AniArt/aniart-card.mp4"
+          caption="Ani Art — project teaser"
         />
       </div>
 
@@ -317,21 +314,17 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
         <section id="overview" className="scroll-mt-24 pt-12">
           <Eyebrow>Overview</Eyebrow>
           <SectionTitle>
-            What if a new clothing brand could earn enough trust online that people bought
-            directly from <em className="italic">them</em> — not from Amazon or Flipkart?
+            What if shopping for anime merch felt like stepping into the anime itself —{' '}
+            <em className="italic">instead of browsing just another generic online store?</em>
           </SectionTitle>
           <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
             <p>
-              Pandragon is a startup clothing brand. When I joined as their solo UI/UX
-              design intern, they had no existing design system — no color palette, no
-              typography, no components, nothing. I was building the entire visual
-              identity and product experience from a blank canvas, at the same time as
-              designing the actual e-commerce site.
-            </p>
-            <p>
-              I took this internship specifically to get real, hands-on experience in the
-              UI/UX field — and Pandragon gave me a rare kind of ownership: end-to-end
-              design responsibility on a real product, for a real company, solo.
+              I started Ani Art to sharpen my UI skills and build a strong portfolio
+              piece. I&apos;d been noticing that most anime merchandise stores online
+              function like standard e-commerce sites first, and “anime stores” second —
+              they sell the right products, but the experience doesn&apos;t make a fan feel
+              anything. I wanted to design a homepage that solved that: visually immersive,
+              but still fast and easy to shop.
             </p>
           </div>
         </section>
@@ -339,26 +332,18 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
         <section id="solution" className="scroll-mt-24 pt-16">
           <Eyebrow>Solution</Eyebrow>
           <SectionTitle>
-            A clean, minimal fashion e-commerce site — designed to feel trustworthy enough
-            to buy from directly.
+            A homepage built around “shop by character, shop by anime” —{' '}
+            <em className="italic">not endless generic categories.</em>
           </SectionTitle>
-          <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
-            <p>
-              The core of the experience is a browsing and checkout flow built around one
-              idea: reduce how much a user has to <em className="italic">search</em> for
-              what they want, and reduce how much they have to{' '}
-              <em className="italic">think</em> about whether it&apos;s safe to buy.
-            </p>
-          </div>
           <Figure
-            src="/pandragon/product-detail.webp"
-            alt="Pandragon product detail page with reviews, offers and size selection"
-            caption="Product detail page with a simplified filtering experience"
+            src="/AniArt/hero.webp"
+            alt="Ani Art homepage hero section with rotating anime collections"
+            caption="Hero banner featuring rotating popular anime collections, with quick-access product shortcuts"
           />
           <Figure
-            src="/pandragon/category.webp"
-            alt="Pandragon category and filter system"
-            caption="Category browsing with the simplified filter system"
+            src="/AniArt/categories.webp"
+            alt="Ani Art shop by anime, stickers and best sellers"
+            caption="Category browsing by anime / genre, sticker shop, and best-selling merchandise"
           />
         </section>
 
@@ -368,149 +353,135 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             className="rachel-serif mt-4 border-l-2 border-[#e65f2e] pl-6 text-balance font-light text-white"
             style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', lineHeight: 1.25 }}
           >
-            Pandragon shipped the design to their development team, and the company loved
-            the result — enough that they want to bring me back to work with them again
-            in the future.
+            Scoped intentionally as a UI + research exercise — homepage only, designed to
+            sell a wide catalog without ever feeling cluttered.
           </blockquote>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            For a first internship, that was the validation I needed that the process
-            actually worked.
+            No prototyping or further screens were built at this stage. The win was
+            proving I could fit figures, cosplay, katanas, manga, stickers and apparel on
+            one page while keeping it minimal and immersive — a foundation I plan to build
+            into a fully functional site in the future.
           </p>
         </section>
 
         <section id="problem" className="scroll-mt-24 pt-16">
           <Eyebrow>The Problem</Eyebrow>
           <SectionTitle>
-            People were buying Pandragon&apos;s t-shirts — just not from Pandragon.
+            Anime merch stores sell everything —{' '}
+            <em className="italic">but hide it like they&apos;re ashamed of it.</em>
           </SectionTitle>
           <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
             <p>
-              Before this redesign, Pandragon already had a site — but almost nobody used
-              it. Customers were instead finding and buying their products through Amazon
-              and Flipkart. That meant Pandragon was:
-            </p>
-            <ul className="list-disc space-y-2 pl-6 marker:text-[#e65f2e]">
-              <li>Giving up margin to third-party platforms</li>
-              <li>Paying platform / listing fees on every sale</li>
-              <li>Never owning the customer relationship</li>
-            </ul>
-            <p>
-              Their ask to me was direct:{' '}
-              <strong className="font-semibold text-white">
-                build a site people can trust enough to buy directly from.
-              </strong>
+              The anime industry is growing fast, and fans want to buy{' '}
+              <em className="italic">everything</em> tied to their favorite series —
+              figures, cosplay pieces, katanas, manga, stickers, apparel. But most stores
+              selling this kind of merch are built like generic e-commerce templates with
+              an anime skin on top. They don&apos;t reflect how a fan actually shops.
             </p>
           </div>
           <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
             Target Users
           </h3>
           <p className="mt-3 text-[16px] leading-relaxed text-neutral-300">
-            Teenagers through adults, both male and female shoppers — a broad but
-            style-conscious audience, since Pandragon&apos;s catalog spans men&apos;s and
-            women&apos;s hoodies, t-shirts, shirts, and oversized tees (with jeans and
-            accessories planned for later). I had to design an information architecture
-            that could hold three categories today and scale to many more without needing
-            a redesign later.
+            Anime fans, cosplayers, collectors, and manga readers — a fast-growing
+            audience that doesn&apos;t just want <em className="italic">a</em> product,
+            they want everything connected to a specific character or series, in one place.
+          </p>
+          <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
+            The Core Goal
+          </h3>
+          <p className="mt-3 text-[16px] leading-relaxed text-neutral-300">
+            If I&apos;m a Demon Slayer fan — specifically a Zenitsu fan — I don&apos;t want
+            to search four different category pages to find his merch. I want to land on a
+            site, find “Demon Slayer,” then “Zenitsu,” and immediately see his cosplay
+            outfit, wig, katana, action figure, and manga volumes together.{' '}
+            <strong className="font-semibold text-white">
+              Shop by character, shop by anime, shop by your taste — without clutter, and
+              without wasting the user&apos;s time.
+            </strong>
           </p>
         </section>
 
         <section id="research" className="scroll-mt-24 pt-16">
           <Eyebrow>Research</Eyebrow>
           <SectionTitle>
-            I studied how people actually shop for clothes online — and why they trust
-            some sites and abandon others.
+            I studied the one real competitor in this space —{' '}
+            <em className="italic">and found a confusing, AI-generated experience.</em>
           </SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            I didn&apos;t have access to a research budget or a user panel, so I did this
-            the direct way: I went through the buying process — start to finish — on
-            every major fashion e-commerce site I could get my hands on, including{' '}
-            <strong className="font-semibold text-white">
-              Levi&apos;s, H&amp;M, Savana, and The Souled Store.
-            </strong>{' '}
-            I wasn&apos;t just looking at visual style — I was tracking the entire
-            journey: how filtering worked, how navigation felt, how checkout was
-            structured, and where I personally felt <em className="italic">hesitant</em>{' '}
-            to trust a site with my money.
+            Since this is a niche category, there&apos;s really only one major player fans
+            currently use:{' '}
+            <strong className="font-semibold text-white">OtakuIsland.</strong> I went
+            through their site in depth and found serious usability issues — confusing to
+            navigate, with no clear path for a fan who already knows exactly what anime or
+            character they&apos;re looking for.
           </p>
+          <Figure
+            src="/AniArt/competitor.webp"
+            alt="OtakuIsland competitor site navbar"
+            caption="OtakuIsland's navbar only lists a handful of anime names despite carrying a larger collection"
+          />
           <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
-            Pain Points I Found
+            Pain Points I Found in the Competitor Site
           </h3>
           <div className="mt-5 space-y-6">
             <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
               <h4 className="rachel-serif text-xl text-white">
-                1. Filtering was needlessly buried
+                1. The navigation undersells the catalog
               </h4>
               <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                Almost every fashion site&apos;s most-used filters are simply
-                &ldquo;Men&rdquo; and &ldquo;Women&rdquo; — but most sites hide that
-                behind a search bar or a secondary menu instead of putting it where users
-                actually look first. I made the decision early to put Men / Women / Shop
-                by Style directly into the main navbar, not buried in a dropdown or
-                search flow.
+                OtakuIsland&apos;s navbar only shows a few anime titles, even though their
+                actual collection is much larger. A user who doesn&apos;t see their favorite
+                anime listed will assume the store doesn&apos;t carry it — and leave
+                immediately. If their anime isn&apos;t visible up front, the site loses
+                them in seconds.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
               <h4 className="rachel-serif text-xl text-white">
-                2. Minimal design often meant confusing design
+                2. The hierarchy buries what they actually sell
               </h4>
               <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                Sites like H&amp;M looked clean and aesthetically strong, but
-                functionally, going &ldquo;back&rdquo; to a previously viewed product or
-                retracing your steps was confusing and easy to lose track of.
-                Good-looking isn&apos;t the same as easy-to-use — and I wanted Pandragon
-                to be both.
+                On a second interface I reviewed, the first heading a user sees is “Buy
+                Stickers” — making the site look like it only sells stickers. It&apos;s
+                only after scrolling for a while that you realize they sell a much wider
+                range of products. If you sell everything, the homepage needs to say so
+                immediately, not several scrolls in.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
               <h4 className="rachel-serif text-xl text-white">
-                3. Inconsistent experiences across web and mobile
+                3. It feels AI-generated and generic
               </h4>
               <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                A surprising number of the sites I tested weren&apos;t actually
-                responsive — they had visibly different, separately-built experiences for
-                web and mobile, which made the brand feel disjointed depending on how you
-                shopped.
+                The overall experience lacked intentional UX thinking — confusing to
+                navigate, with no clear path for a fan who already knows exactly what
+                they&apos;re looking for.
               </p>
             </div>
-          </div>
-          <div className="mt-8 rounded-xl border border-[#e65f2e]/30 bg-[#e65f2e]/[0.06] p-6">
-            <h4 className="rachel-mono text-xs uppercase tracking-[0.2em] text-[#e65f2e]">
-              A personal note on the process
-            </h4>
-            <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-              Starting from a completely blank slate — no brand, no colors, no fonts, no
-              existing components — was the hardest part of this project to begin with.
-              But once I got into it, I found myself genuinely chasing perfection in the
-              details rather than finding it exhausting. That shift is part of what made
-              me want to keep pushing further into UI/UX as a field.
-            </p>
           </div>
         </section>
 
         <section id="process" className="scroll-mt-24 pt-16">
           <Eyebrow>Design Process</Eyebrow>
-          <SectionTitle>From wireframe to a 100+ component design system, solo.</SectionTitle>
+          <SectionTitle>I designed the hierarchy around how a fan actually thinks.</SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            I started with low-fidelity wireframes to lock down structure and flow before
-            touching any visual design — layout, hierarchy, and navigation logic first.
-            Once the core flows felt right, I moved into high-fidelity design in Figma,
-            building out a full style guide and component library from scratch: colors,
-            typography, buttons, cards, form states, and navigation elements —{' '}
-            <strong className="font-semibold text-white">more than 100 components</strong>
-            , all built for a brand that had none of this defined before I started.
+            Since this was a UI + research-focused project, I didn&apos;t build wireframes
+            or prototypes — I moved directly into high-fidelity design in Figma, making
+            deliberate hierarchy decisions at each section based on what I&apos;d just
+            learned from competitor research. I deliberately avoided stacking sections in a
+            way that felt cluttered —{' '}
+            <strong className="font-semibold text-white">
+              selling a large, varied catalog without it ever feeling like “too much.”
+            </strong>
           </p>
-          <Figure
-            src="/pandragon/wireframes.webp"
-            alt="Pandragon low-fidelity wireframes"
-            caption="Low-fidelity wireframes — structure and flow first"
-          />
           <div className="mt-10 grid gap-8 sm:grid-cols-2">
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Core Pages
+                Entry
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Men', 'Women', 'Shop Categories', 'Product Page', 'Hamburger Menu', 'Google Login'].map(
+                {['Hero Banner (rotating series + shortcuts)', 'Top Manga by Popularity'].map(
                   (p) => (
                     <li key={p} className="flex gap-2">
                       <span className="text-[#e65f2e]">→</span> {p}
@@ -521,10 +492,10 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Account &amp; Wishlist
+                Trust &amp; Discovery
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Wishlist (empty state)', 'Wishlist (logged-in)', 'Account Details'].map((p) => (
+                {['Collector’s Hub / Brand Trust', 'Trending Products'].map((p) => (
                   <li key={p} className="flex gap-2">
                     <span className="text-[#e65f2e]">→</span> {p}
                   </li>
@@ -533,10 +504,10 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Cart &amp; Checkout
+                Browse Paths
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Cart', 'Cart (empty state)', 'Cart (logged-in)', 'Shipping', 'Shipping / Address', 'Shipping / Edit Address'].map(
+                {['Shop by Anime / Genre', 'Stickers Shop'].map(
                   (p) => (
                     <li key={p} className="flex gap-2">
                       <span className="text-[#e65f2e]">→</span> {p}
@@ -547,13 +518,12 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Navigation System
+                Close
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
                 {[
-                  'Navbar → Men / Women / Shop by Style / Featured / Filters',
-                  'Hamburger → Newsletter / Customer Service',
-                  'Footer → About / Contact / Returns / FAQ / Shop',
+                  'Best Sellers (social proof)',
+                  'Footer → Brand / Support / Newsletter',
                 ].map((p) => (
                   <li key={p} className="flex gap-2">
                     <span className="text-[#e65f2e]">→</span> {p}
@@ -563,54 +533,29 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
           </div>
           <Figure
-            src="/pandragon/components.webp"
-            alt="Pandragon component library snapshot"
-            caption="A snapshot of the 100+ component library in Figma"
+            src="/AniArt/full-page.webp"
+            alt="Ani Art full homepage structure"
+            caption="Full homepage structure — eight sections ordered by fan intent, not template order"
           />
         </section>
 
         <section id="final" className="scroll-mt-24 pt-16">
           <Eyebrow>Final Designs</Eyebrow>
           <SectionTitle>
-            I designed for one core principle: users should never have to search hard for
-            what they want.
+            I&apos;m most proud of how minimal this feels,{' '}
+            <em className="italic">considering how much it&apos;s actually selling.</em>
           </SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            The decision I&apos;m proudest of across this entire project is how minimal
-            and navigable the final experience feels. Every flow — from browsing by
-            category, to filtering, to checkout — was built so a user can get to what
-            they&apos;re looking for with as few steps and as little friction as
-            possible, without the interface feeling stripped-down or incomplete.
+            The hardest part was fitting a genuinely wide product range — figures, cosplay
+            items, katanas, manga, stickers, apparel — onto a single homepage without it
+            feeling cluttered or overwhelming. Keeping the UI minimal while still making it
+            feel immersive and “anime-coded” (rather than like a generic store) took real
+            thought.
           </p>
-          <Figure
-            src="/pandragon/shop-categories.webp"
-            alt="Pandragon shop categories page"
-            caption="Shop Categories — the full catalog, one tap from the navbar"
+          <VideoFigure
+            src="/AniArt/final.mp4"
+            caption="Full homepage walkthrough — hero to best sellers"
           />
-          <div className="my-8 sm:my-10">
-            <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-              <iframe
-                src={FIGMA_EMBED_URL}
-                title="Pandragon — live Figma prototype"
-                loading="lazy"
-                allowFullScreen
-                className="block h-[500px] w-full sm:h-[600px]"
-              />
-            </div>
-            <p className="rachel-mono mt-3 text-center text-xs uppercase tracking-[0.12em] text-neutral-500">
-              Live Figma prototype — click through the real flow
-            </p>
-            <div className="mt-4 text-center">
-              <a
-                href={FIGMA_PROTO_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="rachel-mono inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-xs uppercase tracking-[0.15em] text-white transition-colors hover:border-[#e65f2e] hover:text-[#e65f2e]"
-              >
-                Open live prototype ↗
-              </a>
-            </div>
-          </div>
         </section>
 
         <section id="reflection" className="scroll-mt-24 pt-16">
@@ -619,36 +564,34 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           <div className="mt-8 space-y-8">
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Managing real workload pressure is its own skill.
+                Selling a lot doesn&apos;t mean showing a lot.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                Early on, the scope of this project — designing an entire brand and
-                product from nothing, solo, in three months — genuinely felt heavy,
-                especially as my first internship. Over time, I built up the capacity to
-                handle more pressure and more workload than I thought I could when I
-                started.
+                A site can sell dozens of product types without looking busy — it just
+                requires being intentional about hierarchy and what earns space above the
+                fold versus further down.
               </p>
             </div>
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Speed and organization compound.
+                Competitor research is most useful when it&apos;s specific.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                I learned to prototype faster and more efficiently as the project went on,
-                and — for the first time — I started actually organizing my Figma files
-                properly instead of letting them sprawl. That habit has stuck with me
-                since.
+                Rather than just looking at anime stores broadly, breaking down{' '}
+                <em className="italic">exactly</em> where OtakuIsland&apos;s navigation and
+                hierarchy failed gave me a much clearer, more defensible set of design
+                decisions for my own homepage.
               </p>
             </div>
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Ownership is the best way to learn.
+                This is early — and that&apos;s okay.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                Being handed a blank slate with zero existing brand assets forced me to
-                make (and own) every design decision — from color palette to checkout
-                flow. That pressure is exactly what turned this into the most formative
-                project of my early design career.
+                This is one of the earlier projects in my design journey, and I can already
+                see how much clearer my thinking around hierarchy and clutter has gotten
+                because of it. I plan to come back and build this into a fully functional
+                site in the future.
               </p>
             </div>
           </div>
@@ -708,4 +651,4 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
   );
 };
 
-export default PandragonCaseStudy;
+export default AniArtCaseStudy;

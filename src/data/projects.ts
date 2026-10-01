@@ -49,6 +49,6 @@ export const projects: Project[] = [
     tools: 'Figma · Prototyping',
     industry: 'Studio',
     description:
-      'Concept studio project — case study coming soon.',
+      'Concept studio platform for video editors — full case study live.',
   },
 ];

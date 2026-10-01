@@ -20,6 +20,12 @@ const ContactSection = lazy(() =>
 const PandragonCaseStudy = lazy(() =>
   import('./components/PandragonCaseStudy').then((m) => ({ default: m.PandragonCaseStudy }))
 );
+const AniArtCaseStudy = lazy(() =>
+  import('./components/AniArtCaseStudy').then((m) => ({ default: m.AniArtCaseStudy }))
+);
+const LunexisCaseStudy = lazy(() =>
+  import('./components/LunexisCaseStudy').then((m) => ({ default: m.LunexisCaseStudy }))
+);
 
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -84,11 +90,19 @@ export const App: React.FC = () => {
     };
   }, []);
 
-  const [page, setPage] = useState<'home' | 'fun' | 'case-study'>('home');
+  const [page, setPage] = useState<'home' | 'fun' | 'case-study' | 'pandragon' | 'aniart' | 'lunexis'>('home');
 
   useEffect(() => {
     document.title =
-      page === 'fun' ? 'Fun — Neha Patel' : page === 'case-study' ? 'Pandragon — Neha Patel' : 'Neha Patel — Portfolio';
+      page === 'fun'
+        ? 'Fun — Neha Patel'
+        : page === 'aniart'
+          ? 'AniArt — Neha Patel'
+          : page === 'lunexis'
+            ? 'Lunexis Studios — Neha Patel'
+            : page === 'pandragon' || page === 'case-study'
+              ? 'Pandragon — Neha Patel'
+              : 'Neha Patel — Portfolio';
   }, [page]);
 
   // Scroll to a home-page section, retrying while lazy chunks mount.
@@ -111,8 +125,14 @@ export const App: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
-  const openStudy = () => {
-    setPage('case-study');
+  const openStudy = (slug?: string) => {
+    if (slug === 'aniart') {
+      setPage('aniart');
+    } else if (slug === 'lunexis-studio' || slug === 'lunexis') {
+      setPage('lunexis');
+    } else {
+      setPage('pandragon');
+    }
     window.scrollTo(0, 0);
   };
 
@@ -189,6 +209,16 @@ export const App: React.FC = () => {
             </>
           ) : page === 'fun' ? (
             <FunPage onBack={() => goHome()} />
+          ) : page === 'aniart' ? (
+            <>
+              <AniArtCaseStudy onBack={() => goHome()} />
+              <ContactSection />
+            </>
+          ) : page === 'lunexis' ? (
+            <>
+              <LunexisCaseStudy onBack={() => goHome()} />
+              <ContactSection />
+            </>
           ) : (
             <>
               <PandragonCaseStudy onBack={() => goHome()} />

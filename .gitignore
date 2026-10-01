@@ -38,3 +38,5 @@ next-env.d.ts
 
 # Raw case-study sources (363MB+ — web versions live in public/pandragon/)
 /Pandragon/
+/ArtArt/
+/Lunexis Studio/

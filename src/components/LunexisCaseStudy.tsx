@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-interface PandragonCaseStudyProps {
+interface LunexisCaseStudyProps {
   onBack: () => void;
 }
 
@@ -16,7 +16,7 @@ const NAV = [
 ];
 
 const FIGMA_PROTO_URL =
-  'https://www.figma.com/proto/EL3E6lApC11Zs2bmIMwuXY/fashion?node-id=1-2966&p=f&viewport=-12588%2C-10553%2C0.53&t=MTKpqK2URl7pF2uX-1&scaling=scale-down-width&content-scaling=fixed&starting-point-node-id=1%3A2966&page-id=0%3A1';
+  'https://www.figma.com/proto/LhzT0N2A1wepJEGBxoQui1/Lunexis-studios?node-id=189-79&viewport=2663%2C768%2C0.3&t=UkjIgBWqsJKzqSiO-1&scaling=contain&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=189%3A79';
 
 const FIGMA_EMBED_URL = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(FIGMA_PROTO_URL)}`;
 
@@ -37,6 +37,25 @@ function ExpandIcon() {
       <path d="M21 3l-7 7" />
       <path d="M3 21l7-7" />
     </svg>
+  );
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="rachel-mono mb-4 text-xs uppercase tracking-[0.2em] text-neutral-400">
+      {children}
+    </p>
+  );
+}
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2
+      className="rachel-serif text-balance font-light tracking-tight text-white"
+      style={{ fontSize: 'clamp(1.6rem, 4.5vw, 2.6rem)', lineHeight: 1.15 }}
+    >
+      {children}
+    </h2>
   );
 }
 
@@ -72,26 +91,7 @@ function VideoFigure({
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="rachel-mono mb-4 text-xs uppercase tracking-[0.2em] text-neutral-400">
-      {children}
-    </p>
-  );
-}
-
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h2
-      className="rachel-serif text-balance font-light tracking-tight text-white"
-      style={{ fontSize: 'clamp(1.6rem, 4.5vw, 2.6rem)', lineHeight: 1.15 }}
-    >
-      {children}
-    </h2>
-  );
-}
-
-export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }) => {
+export const LunexisCaseStudy: React.FC<LunexisCaseStudyProps> = ({ onBack }) => {
   const [active, setActive] = useState<string>(NAV[0].id);
   const [lightbox, setLightbox] = useState<{ src: string[]; caption?: string } | null>(null);
 
@@ -203,15 +203,15 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             ← Back to work
           </button>
           <p className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-400">
-            Pandragon • Shipped 06/2026 – 09/2026
+            Lunexis Studios • Personal Project 2026
           </p>
         </div>
         <h1
           className="rachel-serif mt-4 text-balance font-light tracking-tight text-white"
           style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)', lineHeight: 1.08 }}
         >
-          Designing an e-commerce experience people could{' '}
-          <em className="italic">actually trust</em>
+          Designing a Behance —{' '}
+          <em className="italic">for video editors, not designers</em>
         </h1>
 
         {/* Meta — Role / Timeline / Team / Tools, Skills full row */}
@@ -227,19 +227,17 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           <div>
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Timeline</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              June 2026 – September 2026
+              1 month
               <br />
-              (3 months, Internship)
+              (Personal project)
             </dd>
           </div>
           <div>
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Team</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              Founders / Stakeholders
+              Solo
               <br />
-              Dev team (handoff)
-              <br />
-              1 Designer (me!)
+              (friend&apos;s platform idea)
             </dd>
           </div>
           <div>
@@ -249,15 +247,16 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           <div className="col-span-2 md:col-span-4">
             <dt className="rachel-mono text-xs uppercase tracking-[0.2em] text-neutral-500">Skills</dt>
             <dd className="mt-2 text-[15px] leading-relaxed text-neutral-200">
-              UI/UX Design · Wireframing · Design Systems · User Research · Visual Design
-              (from scratch — no existing brand identity)
+              UI Design · Visual/Brand Direction · Hand-Drawn Wireframing · Information
+              Architecture · Trust-Driven Hierarchy (homepage only)
             </dd>
           </div>
         </dl>
 
         <VideoFigure
-          src="/pandragon/pandragon-card.mp4"
-          caption="Pandragon — project teaser"
+          src="/Lunexis/teaser.mp4"
+          poster="/Lunexis/hero.webp"
+          caption="Lunexis Studios — project teaser"
         />
       </div>
 
@@ -317,21 +316,19 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
         <section id="overview" className="scroll-mt-24 pt-12">
           <Eyebrow>Overview</Eyebrow>
           <SectionTitle>
-            What if a new clothing brand could earn enough trust online that people bought
-            directly from <em className="italic">them</em> — not from Amazon or Flipkart?
+            What if video editors had their own Behance —{' '}
+            <em className="italic">a place built specifically for them to get discovered?</em>
           </SectionTitle>
           <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
             <p>
-              Pandragon is a startup clothing brand. When I joined as their solo UI/UX
-              design intern, they had no existing design system — no color palette, no
-              typography, no components, nothing. I was building the entire visual
-              identity and product experience from a blank canvas, at the same time as
-              designing the actual e-commerce site.
-            </p>
-            <p>
-              I took this internship specifically to get real, hands-on experience in the
-              UI/UX field — and Pandragon gave me a rare kind of ownership: end-to-end
-              design responsibility on a real product, for a real company, solo.
+              A friend of mine had an idea: video editors — the people behind gaming
+              montages, AMVs, lyrical music videos, cinematic edits — don&apos;t really
+              have a dedicated platform to showcase their work and get found by clients.
+              Everything built for creative portfolios (Behance, Dribbble) is designed
+              around static visual design work, not editors. He wanted to bring that idea
+              to life, so I designed Lunexis Studios to turn his concept into something
+              real and visual — a personal project where I got to build an entire platform
+              identity from just an idea in conversation.
             </p>
           </div>
         </section>
@@ -339,26 +336,18 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
         <section id="solution" className="scroll-mt-24 pt-16">
           <Eyebrow>Solution</Eyebrow>
           <SectionTitle>
-            A clean, minimal fashion e-commerce site — designed to feel trustworthy enough
-            to buy from directly.
+            A dark, glowing, cyberpunk-styled platform{' '}
+            <em className="italic">where editors showcase work and clients come to find them.</em>
           </SectionTitle>
-          <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
-            <p>
-              The core of the experience is a browsing and checkout flow built around one
-              idea: reduce how much a user has to <em className="italic">search</em> for
-              what they want, and reduce how much they have to{' '}
-              <em className="italic">think</em> about whether it&apos;s safe to buy.
-            </p>
-          </div>
           <Figure
-            src="/pandragon/product-detail.webp"
-            alt="Pandragon product detail page with reviews, offers and size selection"
-            caption="Product detail page with a simplified filtering experience"
+            src="/Lunexis/hero.webp"
+            alt="Lunexis Studios hero section with hand-drawn line details"
+            caption="Hero section with hand-drawn line details and bold distorted typography"
           />
           <Figure
-            src="/pandragon/category.webp"
-            alt="Pandragon category and filter system"
-            caption="Category browsing with the simplified filter system"
+            src="/Lunexis/categories.webp"
+            alt="Lunexis trending edits, submission flow and footer"
+            caption="Trending edits feed, Submit Your Work form, and closing footer"
           />
         </section>
 
@@ -368,149 +357,92 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             className="rachel-serif mt-4 border-l-2 border-[#e65f2e] pl-6 text-balance font-light text-white"
             style={{ fontSize: 'clamp(1.4rem, 4vw, 2rem)', lineHeight: 1.25 }}
           >
-            Pandragon shipped the design to their development team, and the company loved
-            the result — enough that they want to bring me back to work with them again
+            I showed the finished design to my friend, and he genuinely liked the
+            direction — enough that he wants this built into a real, functioning platform
             in the future.
           </blockquote>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            For a first internship, that was the validation I needed that the process
-            actually worked.
+            For now, it lives as a flagship piece in my own portfolio.
           </p>
         </section>
 
         <section id="problem" className="scroll-mt-24 pt-16">
           <Eyebrow>The Problem</Eyebrow>
           <SectionTitle>
-            People were buying Pandragon&apos;s t-shirts — just not from Pandragon.
+            Editors have nowhere dedicated to be discovered —{' '}
+            <em className="italic">clients have nowhere dedicated to look.</em>
           </SectionTitle>
           <div className="mt-6 space-y-5 text-[16px] leading-relaxed text-neutral-300">
             <p>
-              Before this redesign, Pandragon already had a site — but almost nobody used
-              it. Customers were instead finding and buying their products through Amazon
-              and Flipkart. That meant Pandragon was:
-            </p>
-            <ul className="list-disc space-y-2 pl-6 marker:text-[#e65f2e]">
-              <li>Giving up margin to third-party platforms</li>
-              <li>Paying platform / listing fees on every sale</li>
-              <li>Never owning the customer relationship</li>
-            </ul>
-            <p>
-              Their ask to me was direct:{' '}
-              <strong className="font-semibold text-white">
-                build a site people can trust enough to buy directly from.
-              </strong>
+              Video editing has exploded alongside gaming, anime, and short-form content —
+              but the people doing that work (gaming montage editors, AMV creators,
+              cinematic editors) don&apos;t have a platform built around{' '}
+              <em className="italic">their</em> medium. Existing portfolio platforms are
+              built for designers, not editors.
             </p>
           </div>
           <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
             Target Users
           </h3>
           <p className="mt-3 text-[16px] leading-relaxed text-neutral-300">
-            Teenagers through adults, both male and female shoppers — a broad but
-            style-conscious audience, since Pandragon&apos;s catalog spans men&apos;s and
-            women&apos;s hoodies, t-shirts, shirts, and oversized tees (with jeans and
-            accessories planned for later). I had to design an information architecture
-            that could hold three categories today and scale to many more without needing
-            a redesign later.
+            This platform serves creators specifically — editors looking to showcase their
+            work and get discovered. Clients reach editors directly through DMs, similar
+            to Instagram, rather than through a built-in messaging system.
+          </p>
+          <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
+            The Core Goal
+          </h3>
+          <p className="mt-3 text-[16px] leading-relaxed text-neutral-300">
+            The “About” moment on this homepage exists to directly tell potential clients
+            what Lunexis does:{' '}
+            <strong className="font-semibold text-white">
+              submit your work, we&apos;ll showcase it like we have for others here — and
+              we&apos;ll also feature it on our Instagram page.
+            </strong>{' '}
+            The whole homepage is built to earn a client&apos;s trust fast enough that
+            they&apos;d actually consider hiring someone through it.
           </p>
         </section>
 
         <section id="research" className="scroll-mt-24 pt-16">
           <Eyebrow>Research</Eyebrow>
           <SectionTitle>
-            I studied how people actually shop for clothes online — and why they trust
-            some sites and abandon others.
+            I drew on platforms I already study closely{' '}
+            <em className="italic">for my own design work.</em>
           </SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            I didn&apos;t have access to a research budget or a user panel, so I did this
-            the direct way: I went through the buying process — start to finish — on
-            every major fashion e-commerce site I could get my hands on, including{' '}
-            <strong className="font-semibold text-white">
-              Levi&apos;s, H&amp;M, Savana, and The Souled Store.
-            </strong>{' '}
-            I wasn&apos;t just looking at visual style — I was tracking the entire
-            journey: how filtering worked, how navigation felt, how checkout was
-            structured, and where I personally felt <em className="italic">hesitant</em>{' '}
-            to trust a site with my money.
+            Since I actively use{' '}
+            <strong className="font-semibold text-white">Behance</strong> to showcase my
+            own design work, I already had a strong working knowledge of how
+            creative-showcase platforms build trust and structure discovery. I leaned on
+            that experience, along with patterns from{' '}
+            <strong className="font-semibold text-white">Upwork and Fiverr,</strong> to
+            shape a hierarchy specifically meant to build a client&apos;s trust in an
+            editor&apos;s skill before ever asking them to act.
           </p>
-          <h3 className="rachel-mono mt-10 text-sm uppercase tracking-[0.2em] text-neutral-200">
-            Pain Points I Found
-          </h3>
-          <div className="mt-5 space-y-6">
-            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
-              <h4 className="rachel-serif text-xl text-white">
-                1. Filtering was needlessly buried
-              </h4>
-              <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                Almost every fashion site&apos;s most-used filters are simply
-                &ldquo;Men&rdquo; and &ldquo;Women&rdquo; — but most sites hide that
-                behind a search bar or a secondary menu instead of putting it where users
-                actually look first. I made the decision early to put Men / Women / Shop
-                by Style directly into the main navbar, not buried in a dropdown or
-                search flow.
-              </p>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
-              <h4 className="rachel-serif text-xl text-white">
-                2. Minimal design often meant confusing design
-              </h4>
-              <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                Sites like H&amp;M looked clean and aesthetically strong, but
-                functionally, going &ldquo;back&rdquo; to a previously viewed product or
-                retracing your steps was confusing and easy to lose track of.
-                Good-looking isn&apos;t the same as easy-to-use — and I wanted Pandragon
-                to be both.
-              </p>
-            </div>
-            <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
-              <h4 className="rachel-serif text-xl text-white">
-                3. Inconsistent experiences across web and mobile
-              </h4>
-              <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-                A surprising number of the sites I tested weren&apos;t actually
-                responsive — they had visibly different, separately-built experiences for
-                web and mobile, which made the brand feel disjointed depending on how you
-                shopped.
-              </p>
-            </div>
-          </div>
-          <div className="mt-8 rounded-xl border border-[#e65f2e]/30 bg-[#e65f2e]/[0.06] p-6">
-            <h4 className="rachel-mono text-xs uppercase tracking-[0.2em] text-[#e65f2e]">
-              A personal note on the process
-            </h4>
-            <p className="mt-2 text-[15px] leading-relaxed text-neutral-300">
-              Starting from a completely blank slate — no brand, no colors, no fonts, no
-              existing components — was the hardest part of this project to begin with.
-              But once I got into it, I found myself genuinely chasing perfection in the
-              details rather than finding it exhausting. That shift is part of what made
-              me want to keep pushing further into UI/UX as a field.
-            </p>
-          </div>
         </section>
 
         <section id="process" className="scroll-mt-24 pt-16">
           <Eyebrow>Design Process</Eyebrow>
-          <SectionTitle>From wireframe to a 100+ component design system, solo.</SectionTitle>
+          <SectionTitle>I designed this around trust, in a specific order.</SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            I started with low-fidelity wireframes to lock down structure and flow before
-            touching any visual design — layout, hierarchy, and navigation logic first.
-            Once the core flows felt right, I moved into high-fidelity design in Figma,
-            building out a full style guide and component library from scratch: colors,
-            typography, buttons, cards, form states, and navigation elements —{' '}
-            <strong className="font-semibold text-white">more than 100 components</strong>
-            , all built for a brand that had none of this defined before I started.
+            Editors, as an audience, tend to gravitate toward dark-themed interfaces — so
+            I leaned fully into a glowing, dark cyberpunk aesthetic. To add a creative,
+            human touch against all the bold typography, I added hand-drawn line details
+            that visually act like a path guiding the user down the page, along with
+            hand-drawn circles used to highlight key words.{' '}
+            <strong className="font-semibold text-white">
+              I deliberately did not add interactive components — the focus was entirely on
+              nailing visual direction and page hierarchy.
+            </strong>
           </p>
-          <Figure
-            src="/pandragon/wireframes.webp"
-            alt="Pandragon low-fidelity wireframes"
-            caption="Low-fidelity wireframes — structure and flow first"
-          />
           <div className="mt-10 grid gap-8 sm:grid-cols-2">
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Core Pages
+                Entry
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Men', 'Women', 'Shop Categories', 'Product Page', 'Hamburger Menu', 'Google Login'].map(
+                {['Hero Section (video-first intent)', 'About Lunexis (glimpse)'].map(
                   (p) => (
                     <li key={p} className="flex gap-2">
                       <span className="text-[#e65f2e]">→</span> {p}
@@ -521,10 +453,10 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Account &amp; Wishlist
+                Discovery
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Wishlist (empty state)', 'Wishlist (logged-in)', 'Account Details'].map((p) => (
+                {['Our Projects (real quality proof)', 'Top Creators leaderboard + hire'].map((p) => (
                   <li key={p} className="flex gap-2">
                     <span className="text-[#e65f2e]">→</span> {p}
                   </li>
@@ -533,10 +465,10 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Cart &amp; Checkout
+                Trust
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
-                {['Cart', 'Cart (empty state)', 'Cart (logged-in)', 'Shipping', 'Shipping / Address', 'Shipping / Edit Address'].map(
+                {['Mobile Mockup / We’ll Publish You', 'Trending Videos (daily feed)'].map(
                   (p) => (
                     <li key={p} className="flex gap-2">
                       <span className="text-[#e65f2e]">→</span> {p}
@@ -547,13 +479,12 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
             <div>
               <h3 className="rachel-mono text-sm uppercase tracking-[0.2em] text-neutral-200">
-                Navigation System
+                Close
               </h3>
               <ul className="mt-3 space-y-1.5 text-[15px] text-neutral-300">
                 {[
-                  'Navbar → Men / Women / Shop by Style / Featured / Filters',
-                  'Hamburger → Newsletter / Customer Service',
-                  'Footer → About / Contact / Returns / FAQ / Shop',
+                  'Submit Your Work (name / email / drive link)',
+                  'Footer → Socials / Email contact',
                 ].map((p) => (
                   <li key={p} className="flex gap-2">
                     <span className="text-[#e65f2e]">→</span> {p}
@@ -563,35 +494,31 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
             </div>
           </div>
           <Figure
-            src="/pandragon/components.webp"
-            alt="Pandragon component library snapshot"
-            caption="A snapshot of the 100+ component library in Figma"
+            src="/Lunexis/sections.webp"
+            alt="Lunexis projects and top creators sections"
+            caption="Personal project showcase by category, and the Top Creators leaderboard with hire access"
           />
         </section>
 
         <section id="final" className="scroll-mt-24 pt-16">
           <Eyebrow>Final Designs</Eyebrow>
           <SectionTitle>
-            I designed for one core principle: users should never have to search hard for
-            what they want.
+            I built this from hand-drawn wireframes first —{' '}
+            <em className="italic">a new process for me.</em>
           </SectionTitle>
           <p className="mt-6 text-[16px] leading-relaxed text-neutral-300">
-            The decision I&apos;m proudest of across this entire project is how minimal
-            and navigable the final experience feels. Every flow — from browsing by
-            category, to filtering, to checkout — was built so a user can get to what
-            they&apos;re looking for with as few steps and as little friction as
-            possible, without the interface feeling stripped-down or incomplete.
+            This was genuinely my first real hands-on project where I started with
+            hand-drawn wireframes before touching Figma, mapping out the “path” I wanted
+            the user to travel down the page before committing to any visual style. That
+            process is part of why the hand-drawn line and circle details made it into
+            the final design — they came directly from how I was already sketching the
+            flow.
           </p>
-          <Figure
-            src="/pandragon/shop-categories.webp"
-            alt="Pandragon shop categories page"
-            caption="Shop Categories — the full catalog, one tap from the navbar"
-          />
           <div className="my-8 sm:my-10">
             <div className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
               <iframe
                 src={FIGMA_EMBED_URL}
-                title="Pandragon — live Figma prototype"
+                title="Lunexis Studios — live Figma prototype"
                 loading="lazy"
                 allowFullScreen
                 className="block h-[500px] w-full sm:h-[600px]"
@@ -619,36 +546,36 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
           <div className="mt-8 space-y-8">
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Managing real workload pressure is its own skill.
+                This is where I started finding my own style.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                Early on, the scope of this project — designing an entire brand and
-                product from nothing, solo, in three months — genuinely felt heavy,
-                especially as my first internship. Over time, I built up the capacity to
-                handle more pressure and more workload than I thought I could when I
-                started.
+                Lunexis was my first real hands-on project in a true sense — starting from
+                hand-drawn wireframes, mapping out a path for the user, and then
+                translating that into a finished visual direction. Somewhere in that
+                process, I found a style that felt genuinely mine, rather than borrowed
+                from a reference.
               </p>
             </div>
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Speed and organization compound.
+                Designing from someone else&apos;s idea is a different skill.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                I learned to prototype faster and more efficiently as the project went on,
-                and — for the first time — I started actually organizing my Figma files
-                properly instead of letting them sprawl. That habit has stuck with me
-                since.
+                This wasn&apos;t my own concept — it came from a friend&apos;s idea for a
+                real platform. Translating someone else&apos;s vision into a visual
+                identity and structure pushed me to think more about trust and clarity
+                than personal taste.
               </p>
             </div>
             <div>
               <h3 className="rachel-serif text-2xl font-light text-white">
-                Ownership is the best way to learn.
+                I enjoyed the process more than I expected.
               </h3>
               <p className="mt-2 text-[16px] leading-relaxed text-neutral-300">
-                Being handed a blank slate with zero existing brand assets forced me to
-                make (and own) every design decision — from color palette to checkout
-                flow. That pressure is exactly what turned this into the most formative
-                project of my early design career.
+                Between the dark cyberpunk direction, the hand-drawn details, and figuring
+                out an entirely new hierarchy built around trust, this was the most
+                creatively enjoyable project of the three — and it showed me I want more
+                projects like this going forward.
               </p>
             </div>
           </div>
@@ -708,4 +635,4 @@ export const PandragonCaseStudy: React.FC<PandragonCaseStudyProps> = ({ onBack }
   );
 };
 
-export default PandragonCaseStudy;
+export default LunexisCaseStudy;

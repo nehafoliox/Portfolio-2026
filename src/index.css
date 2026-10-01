@@ -20,6 +20,16 @@ html {
   scroll-behavior: smooth;
   /* Fixed pill navbar offset for #about / #project / #contact jumps */
   scroll-padding-top: 6rem;
+  /* Hide site scrollbar — scrolling still works via wheel / touch / Lenis */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* Lenis smooth-scroll recommended styles */

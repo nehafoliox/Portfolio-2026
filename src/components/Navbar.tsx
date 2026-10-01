@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export type Page = 'home' | 'fun' | 'case-study';
+export type Page = 'home' | 'fun' | 'case-study' | 'pandragon' | 'aniart' | 'lunexis';
 
 interface NavbarProps {
   page: Page;
