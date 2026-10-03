@@ -35,6 +35,9 @@ export const CustomCursor: React.FC = () => {
     };
     raf = requestAnimationFrame(loop);
 
+    let currentLabel: string | null = null;
+    let currentHot = false;
+
     const onMove = (e: MouseEvent) => {
       target.x = e.clientX;
       target.y = e.clientY;
@@ -44,12 +47,26 @@ export const CustomCursor: React.FC = () => {
       const el = e.target as HTMLElement | null;
       const tagged = el?.closest?.('[data-cursor]');
       if (tagged) {
-        setLabel(humanize(tagged.getAttribute('data-cursor') ?? ''));
-        setHot(false);
+        const next = humanize(tagged.getAttribute('data-cursor') ?? '');
+        if (next !== currentLabel) {
+          currentLabel = next;
+          setLabel(next);
+        }
+        if (currentHot) {
+          currentHot = false;
+          setHot(false);
+        }
         return;
       }
-      setLabel(null);
-      setHot(Boolean(el?.closest?.('a, button')));
+      if (currentLabel !== null) {
+        currentLabel = null;
+        setLabel(null);
+      }
+      const nextHot = Boolean(el?.closest?.('a, button'));
+      if (nextHot !== currentHot) {
+        currentHot = nextHot;
+        setHot(nextHot);
+      }
     };
     const onLeave = () => setVisible(false);
 

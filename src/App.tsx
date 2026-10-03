@@ -27,45 +27,37 @@ const LunexisCaseStudy = lazy(() =>
   import('./components/LunexisCaseStudy').then((m) => ({ default: m.LunexisCaseStudy }))
 );
 
+import { setLenis, scrollTo as smoothScrollTo, resizeLenis } from './utils/scroll';
+
 export const App: React.FC = () => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const [heroCovered, setHeroCovered] = useState(false);
 
   // Buttery smooth scrolling (Lenis). Uses native scroll under the hood,
   // so position: sticky (pinned hero + stacking cards) keeps working.
-  // Disabled for users who prefer reduced motion. Deferred until idle
-  // so it never blocks First Paint.
+  // Disabled for users who prefer reduced motion.
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    let lenis: Lenis | null = null;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+    });
+    setLenis(lenis);
+
     let raf = 0;
-    const start = () => {
-      lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-      const loop = (time: number) => {
-        lenis?.raf(time);
-        raf = requestAnimationFrame(loop);
-      };
+    const loop = (time: number) => {
+      lenis.raf(time);
       raf = requestAnimationFrame(loop);
     };
-    let cleanupIdle: (() => void) | undefined;
-    const w = window as unknown as {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-      cancelIdleCallback?: (id: number) => void;
-    };
-    if (typeof w.requestIdleCallback === 'function') {
-      const id = w.requestIdleCallback!(start, { timeout: 2000 });
-      cleanupIdle = () => w.cancelIdleCallback?.(id);
-    } else {
-      const t = window.setTimeout(start, 800);
-      cleanupIdle = () => window.clearTimeout(t);
-    }
+    raf = requestAnimationFrame(loop);
+
     return () => {
-      cleanupIdle?.();
       cancelAnimationFrame(raf);
-      lenis?.destroy();
+      lenis.destroy();
+      setLenis(null);
     };
   }, []);
 
@@ -105,13 +97,26 @@ export const App: React.FC = () => {
               : 'Neha Patel — Portfolio';
   }, [page]);
 
+  // When changing pages, reset scroll to top immediately & recalculate Lenis layout
+  useEffect(() => {
+    smoothScrollTo(0, { immediate: true });
+    const r1 = requestAnimationFrame(() => resizeLenis());
+    const t1 = window.setTimeout(() => resizeLenis(), 150);
+    const t2 = window.setTimeout(() => resizeLenis(), 600);
+    return () => {
+      cancelAnimationFrame(r1);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+    };
+  }, [page]);
+
   // Scroll to a home-page section, retrying while lazy chunks mount.
   const scrollToId = (id: string) => {
     let tries = 0;
     const attempt = () => {
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        smoothScrollTo(el, { offset: -80 });
       } else if (tries < 6) {
         tries += 1;
         window.setTimeout(attempt, 250);
@@ -122,7 +127,6 @@ export const App: React.FC = () => {
 
   const goFun = () => {
     setPage('fun');
-    window.scrollTo(0, 0);
   };
 
   const openStudy = (slug?: string) => {
@@ -133,7 +137,6 @@ export const App: React.FC = () => {
     } else {
       setPage('pandragon');
     }
-    window.scrollTo(0, 0);
   };
 
   const goHome = (anchor?: string) => {
@@ -141,13 +144,11 @@ export const App: React.FC = () => {
       setPage('home');
       if (anchor) {
         window.setTimeout(() => scrollToId(anchor), 150);
-      } else {
-        window.scrollTo(0, 0);
       }
     } else if (anchor) {
       scrollToId(anchor);
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      smoothScrollTo(0);
     }
   };
 
@@ -211,17 +212,17 @@ export const App: React.FC = () => {
             <FunPage onBack={() => goHome()} />
           ) : page === 'aniart' ? (
             <>
-              <AniArtCaseStudy onBack={() => goHome()} />
+              <AniArtCaseStudy onBack={() => goHome('project')} />
               <ContactSection />
             </>
           ) : page === 'lunexis' ? (
             <>
-              <LunexisCaseStudy onBack={() => goHome()} />
+              <LunexisCaseStudy onBack={() => goHome('project')} />
               <ContactSection />
             </>
           ) : (
             <>
-              <PandragonCaseStudy onBack={() => goHome()} />
+              <PandragonCaseStudy onBack={() => goHome('project')} />
               <ContactSection />
             </>
           )}

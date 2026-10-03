@@ -3,13 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 const VIDEO_URL = '/final.mp4';
 const POSTER_URL = '/video-poster.webp';
 const MODEL_URL = '/neha-model.webp';
-const SENSITIVITY = 0.8;
 
 export const BackgroundVideo: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const targetTimeRef = useRef<number>(0);
-  const prevXRef = useRef<number | null>(null);
+  const targetTimeRef = useRef<number>(1.43);
+  const currentSeekTimeRef = useRef<number>(1.43);
+  const mouseXRatioRef = useRef<number>(0.5);
   const isSeekingRef = useRef<boolean>(false);
+  const rafIdRef = useRef<number | null>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [ready, setReady] = useState(false);
 
@@ -37,11 +38,10 @@ export const BackgroundVideo: React.FC = () => {
         const id = w.requestIdleCallback!(start, { timeout: 2500 });
         cleanupIdle = () => w.cancelIdleCallback?.(id);
       } else {
-        const t = window.setTimeout(start, 1200);
+        const t = window.setTimeout(start, 1000);
         cleanupIdle = () => window.clearTimeout(t);
       }
     }
-    // Handle resize/rotation into desktop range after initial load.
     const onChange = (e: MediaQueryListEvent) => {
       if (e.matches) start();
     };
@@ -52,69 +52,94 @@ export const BackgroundVideo: React.FC = () => {
     };
   }, []);
 
+  // Smooth mouse tracking with requestAnimationFrame interpolation
   useEffect(() => {
     if (!shouldLoad) return;
+
     const handleMouseMove = (e: MouseEvent) => {
-      const video = videoRef.current;
-      if (!video || isNaN(video.duration) || video.duration === 0) return;
-
-      if (prevXRef.current === null) {
-        prevXRef.current = e.clientX;
-        return;
-      }
-
-      const delta = e.clientX - prevXRef.current;
-      prevXRef.current = e.clientX;
-
-      const timeOffset =
-        (delta / window.innerWidth) * SENSITIVITY * video.duration;
-      
-      const newTarget = targetTimeRef.current + timeOffset;
-      targetTimeRef.current = Math.min(Math.max(newTarget, 0), video.duration);
-
-      if (!isSeekingRef.current) {
-        isSeekingRef.current = true;
-        video.currentTime = targetTimeRef.current;
-      }
+      const width = window.innerWidth || 1;
+      // Map horizontal cursor position (0 to 1) directly across screen width
+      const ratio = Math.min(Math.max(e.clientX / width, 0), 1);
+      mouseXRatioRef.current = ratio;
     };
 
     const handleMouseLeave = () => {
-      prevXRef.current = null;
+      // Return gaze smoothly to center when cursor leaves the window
+      mouseXRatioRef.current = 0.5;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
 
+    // Continuous smooth interpolation loop
+    let running = true;
+    const tick = () => {
+      if (!running) return;
+      const video = videoRef.current;
+      if (video && !isNaN(video.duration) && video.duration > 0) {
+        // Target time: 0 (left) to duration (right)
+        const target = mouseXRatioRef.current * video.duration;
+        targetTimeRef.current = target;
+
+        // Smooth damping towards target
+        const diff = target - currentSeekTimeRef.current;
+        if (Math.abs(diff) > 0.003) {
+          currentSeekTimeRef.current += diff * 0.18;
+
+          if (!isSeekingRef.current) {
+            isSeekingRef.current = true;
+            const seekTarget = currentSeekTimeRef.current;
+            if ('fastSeek' in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === 'function') {
+              (video as unknown as { fastSeek: (t: number) => void }).fastSeek(seekTarget);
+            } else {
+              video.currentTime = seekTarget;
+            }
+          }
+        }
+      }
+      rafIdRef.current = requestAnimationFrame(tick);
+    };
+
+    rafIdRef.current = requestAnimationFrame(tick);
+
     return () => {
+      running = false;
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [shouldLoad]);
 
   const handleSeeked = () => {
+    isSeekingRef.current = false;
     const video = videoRef.current;
-    if (!video || isNaN(video.duration)) {
-      isSeekingRef.current = false;
-      return;
-    }
+    if (!video || isNaN(video.duration)) return;
 
-    if (Math.abs(video.currentTime - targetTimeRef.current) > 0.005) {
-      video.currentTime = targetTimeRef.current;
-    } else {
-      isSeekingRef.current = false;
+    // Catch up if there is still a noticeable lag
+    if (Math.abs(video.currentTime - currentSeekTimeRef.current) > 0.02) {
+      isSeekingRef.current = true;
+      if ('fastSeek' in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === 'function') {
+        (video as unknown as { fastSeek: (t: number) => void }).fastSeek(currentSeekTimeRef.current);
+      } else {
+        video.currentTime = currentSeekTimeRef.current;
+      }
     }
   };
 
   const handleLoadedMetadata = () => {
-    if (videoRef.current) {
-      targetTimeRef.current = videoRef.current.currentTime || 0;
+    const video = videoRef.current;
+    if (video && !isNaN(video.duration)) {
+      // Start in the center (matching poster)
+      const centerTime = video.duration * 0.5;
+      targetTimeRef.current = centerTime;
+      currentSeekTimeRef.current = centerTime;
+      video.currentTime = centerTime;
     }
   };
 
   return (
     <>
-      {/* Instant lightweight poster — paints in ~2KB while video defers.
-          Desktop-only; behavior unchanged. */}
+      {/* Instant lightweight poster — paints in ~100KB while video defers. */}
       <img
         src={POSTER_URL}
         alt=""
@@ -132,10 +157,7 @@ export const BackgroundVideo: React.FC = () => {
           transition: 'opacity 0.6s ease',
         }}
       />
-      {/* Static model for phones/tablets — flex-centered container +
-          object-cover/object-center keeps the character centered at every
-          screen size. Never fetched on desktop thanks
-          to the media-gated source. */}
+      {/* Static model for phones/tablets — keeps character centered at every screen size */}
       <picture
         aria-hidden="true"
         className="fixed inset-0 z-0 flex items-center justify-center pointer-events-none xl:hidden"
@@ -164,7 +186,7 @@ export const BackgroundVideo: React.FC = () => {
           src={VIDEO_URL}
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           poster={POSTER_URL}
           onSeeked={handleSeeked}
           onLoadedMetadata={handleLoadedMetadata}
@@ -184,3 +206,5 @@ export const BackgroundVideo: React.FC = () => {
     </>
   );
 };
+
+export default BackgroundVideo;

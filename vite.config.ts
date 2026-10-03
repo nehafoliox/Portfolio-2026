@@ -7,8 +7,11 @@ export default defineConfig({
   server: {
     watch: {
       // Ignore large media files and the nested Next.js project to prevent EBUSY errors
-      ignored: ['**/hero.mp4', '**/neha-portfolio/**'],
+      ignored: ['**/hero.mp4', '**/final.mp4', '**/final new.mp4', '**/neha-portfolio/**'],
     },
+  },
+  esbuild: {
+    legalComments: 'none',
   },
   build: {
     // Vercel: smaller chunks + modern minify + no oversized-asset warnings for video

@@ -33,6 +33,44 @@ const WORK_PROJECTS: WorkProject[] = [
   },
 ];
 
+function CardVideo({ src, poster }: { src: string; poster?: string }) {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  React.useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(v);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-hidden="true"
+      tabIndex={-1}
+      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+    />
+  );
+}
+
 function WorkCard({ project, onOpen }: { project: WorkProject; onOpen?: () => void }) {
   const [err, setErr] = useState(false);
   return (
@@ -61,43 +99,19 @@ function WorkCard({ project, onOpen }: { project: WorkProject; onOpen?: () => vo
         >
           <div className="relative w-full h-full overflow-hidden" role="img" aria-label={project.title}>
             {project.slug === 'pandragon-internship' ? (
-              <video
+              <CardVideo
                 src="/pandragon/pandragon-card.mp4"
                 poster={project.image}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-                tabIndex={-1}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
             ) : project.slug === 'aniart' ? (
-              <video
+              <CardVideo
                 src="/AniArt/aniart-card.mp4"
                 poster="/AniArt/hero.webp"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-                tabIndex={-1}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
             ) : project.slug === 'lunexis-studio' ? (
-              <video
+              <CardVideo
                 src="/Lunexis/lunexis-card.mp4"
                 poster="/Lunexis/hero.webp"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-hidden="true"
-                tabIndex={-1}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
             ) : project.image !== '' && !err ? (
               <img

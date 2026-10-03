@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#0C0C0C"/>
+  <rect x="1" y="1" width="62" height="62" rx="15" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+  <text x="32" y="41" text-anchor="middle" fill="#FFFFFF" font-family="'Geist', -apple-system, sans-serif" font-weight="700" font-size="26" letter-spacing="-0.5">NP</text>
+  <circle cx="51" cy="18" r="3.5" fill="#e65f2e"/>
+</svg>

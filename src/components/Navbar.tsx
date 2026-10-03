@@ -26,16 +26,30 @@ export const Navbar: React.FC<NavbarProps> = ({ page, onWork, onFun, onContact, 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isCaseStudy =
+    page === 'pandragon' ||
+    page === 'aniart' ||
+    page === 'lunexis' ||
+    page === 'case-study';
+
   // Scroll-spy: highlight the link for the section currently in view.
-  // Only runs on the home page; on the fun page Fun stays highlighted.
-  // Sections are lazy-loaded, so re-query until all exist.
+  // On case study pages, Work stays highlighted.
+  // On the fun page, Fun stays highlighted.
+  // On the home page, scroll-spies between Work (project) and Contact.
   useEffect(() => {
-    if (page !== 'home') {
-      setActive(page === 'fun' ? 'fun' : null);
+    if (isCaseStudy) {
+      setActive('project');
       return;
     }
+
+    if (page === 'fun') {
+      setActive('fun');
+      return;
+    }
+
     const ids = ['project', 'contact'];
     let observer: IntersectionObserver | null = null;
+    let timeoutId: number | undefined;
     let tries = 0;
 
     const observe = () => {
@@ -68,12 +82,15 @@ export const Navbar: React.FC<NavbarProps> = ({ page, onWork, onFun, onContact, 
         return;
       }
       tries += 1;
-      window.setTimeout(observe, 500);
+      timeoutId = window.setTimeout(observe, 300);
     };
 
     observe();
-    return () => observer?.disconnect();
-  }, [page]);
+    return () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
+      observer?.disconnect();
+    };
+  }, [page, isCaseStudy]);
 
   const navLinks = [
     { label: 'Work', id: 'project', onClick: onWork },
